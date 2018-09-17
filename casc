@@ -1,0 +1,16 @@
+                                      Table "public.results"
+      Column      |       Type        | Collation | Nullable |               Default               
+------------------+-------------------+-----------+----------+-------------------------------------
+ id               | integer           |           | not null | nextval('results_id_seq'::regclass)
+ student_id       | integer           |           | not null | 
+ unit_number      | integer           |           | not null | 
+ comment          | character varying |           | not null | 
+ satisfaction     | integer           |           | not null | 
+ assessment_topic | integer           |           | not null | 
+ class_topic      | integer           |           | not null | 
+ lecture_topic    | integer           |           | not null | 
+ other_topic      | integer           |           | not null | 
+ resource_topic   | integer           |           | not null | 
+Indexes:
+    "results_pkey" PRIMARY KEY, btree (id)
+
