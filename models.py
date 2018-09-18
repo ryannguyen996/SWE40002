@@ -5,15 +5,15 @@ class Result(db.Model):
     __tablename__ = 'results'
 
     id = db.Column(db.Integer, primary_key=True)
-    student_id = db.Column(db.Integer, nullable = False)
-    unit_number = db.Column(db.Integer, nullable = False)
-    comment = db.Column(db.String(), nullable = False)
-    satisfaction = db.Column(db.Integer, nullable = False)
-    assessment_topic = db.Column(db.Integer, nullable = False)
-    class_topic = db.Column(db.Integer, nullable = False)
-    lecture_topic = db.Column(db.Integer, nullable = False)
-    other_topic = db.Column(db.Integer, nullable = False)
-    resource_topic = db.Column(db.Integer, nullable = False)
+    student_id = db.Column(db.Integer, nullable=False)
+    unit_number = db.Column(db.Integer, nullable=False)
+    comment = db.Column(db.String(), nullable=False)
+    satisfaction = db.Column(db.Integer, nullable=False)
+    assessment_topic = db.Column(db.Integer, nullable=False)
+    class_topic = db.Column(db.Integer, nullable=False)
+    lecture_topic = db.Column(db.Integer, nullable=False)
+    other_topic = db.Column(db.Integer, nullable=False)
+    resource_topic = db.Column(db.Integer, nullable=False)
 
     def __init__(self, student_id, unit_number, comment, satisfaction,  assessment_topic, class_topic, lecture_topic, other_topic, resource_topic):
         self.student_id = student_id
