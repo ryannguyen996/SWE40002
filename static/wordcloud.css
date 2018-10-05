@@ -82,4 +82,7 @@
     margin-right: 10px
 }
 
-body { padding-top: 70px; }
+body {
+    padding-top: 70px;
+    background-color: rgba(242,242,242) !important;
+}
