@@ -31,13 +31,13 @@ app.controller('TestCtrl', ['$scope', '$http', '$timeout', '$element', '$compile
     $scope.unitSetting = {
         scrollable: true,
         scrollableHeight: '250px',
-        enableSearch: true
+        enableSearch: true,
+        smartButtonMaxItems: 4
     };
     $scope.topicSetting = {
         scrollable: true,
-        scrollableHeight: '250px',
+        scrollableHeight: '200px',
         selectionLimit: 1,
-        showUncheckAll: false,
         smartButtonMaxItems: 1
     };
 
