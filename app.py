@@ -173,10 +173,13 @@ def uploads():
         file.save(destination)
     if(assert_format(destination)):
         if(assert_csvformat(destination)):
+            os.remove(destination)
             return "YAY! Process to wordcloud generator page", 202
         else:
+            os.remove(destination)
             return "Wrong csv format!", 202
     else:
+        os.remove(destination)
         return "Wrong file type!", 202
 
 
