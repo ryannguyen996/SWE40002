@@ -4,83 +4,86 @@
 <head>
     <title>Wordcount</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static', filename='wordcloud.css') }}" />
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon"/>
 </head>
-<!--<body data-ng-app="myapp" data-ng-controller="UploadController">-->
 
-<body data-ng-app="myApp" data-ng-controller="TestCtrl">
+<body data-ng-app="myApp" data-ng-controller="TestCtrl" data-ng-init="lists={{lists}}">
 
-    <div class="jumbotron text-center" style="margin-bottom:0">
-        <h1>TEST APP</h1>
-        <p>Resize this responsive page to see the effect!</p>
-    </div>
-
-
-    <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
-        <a class="navbar-brand" href="#">Navbar</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="collapsibleNavbar">
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link" href="/">Upload</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/wordcloud">Wordcloud</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Link</a>
-                </li>
-            </ul>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">Project name</a>
+            </div>
+            <div id="navbar" class="collapse navbar-collapse">
+                <ul class="nav navbar-nav">
+                    <li><a href="/">Upload</a></li>
+                    <li class="active"><a href="/wordcloud">Wordcloud</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </div>
+            <!--/.nav-collapse -->
         </div>
     </nav>
 
     <div class="container">
-        <br />
-        <br />
         <div class="row">
-            <form role="form" ng-submit="getResults()">
-                <div class="form-group">
-                    <span>Select unit number</span>
-                    <select id="unitnumber" data-ng-model="unitnumber">
-                        {% for item in lists %}
-                        <option value="{{ item }}">{{item}}</option>
-                        {% endfor %}
-                    </select>
-                    <span>Select topic</span>
-                    <select id="topic" data-ng-model="topic">
-                        <option value="assessment">assessment</option>
-                        <option value="class">class</option>
-                        <option value="lecture">lecture</option>
-                        <option value="resource">resource</option>
-                        <option value="other">other</option>
-                    </select>
-                    {% raw %}
-                    <button type="submit" class="btn btn-primary" data-ng-disabled="loading">{{ submitButtonText }}</button>
-                    <p>{{message}}</p>
-                    {% endraw %}
-                </div>
+            <input type="checkbox" data-ng-model="compare">Compare?
+        </div>
+        <div class="row">
+            <div class="col-xs-6">
+                <form role="form" data-ng-submit="getResults()">
+                    <div class="form-group">
+                        <span>Select unit number</span>
+                        <div data-ng-dropdown-multiselect="" extra-settings="unitSetting" options="unitnumber" selected-model="unitnumberSelected" checkboxes="true"></div><br>
+                        <span>Select topic</span>
+                        <div data-ng-dropdown-multiselect="" extra-settings="topicSetting" options="topic" selected-model="topicSelected" checkboxes="true"></div><br>
+                        {% raw %}
+                        <button type="submit" class="btn btn-primary" data-ng-disabled="loading">{{ submitButtonText }}</button>
+                        <p>{{message}}</p>
+                        {% endraw %}
+                    </div>
 
-            </form>
-        </div>
-        <div class="row">
-            <p>Wordcloud visulization</p>
-        </div>
-        <div class="row">
-            <tang-cloud words="words" on-click="test(word)" width="500" height="500"></tang-cloud>
+                </form>
+                <p>Wordcloud visulization</p>
+                <tang-cloud words="words" on-click="test(word)" width="500" height="500"></tang-cloud>
+            </div>
+
+            <div class="col-xs-6" ng-show="compare">
+                <form role="form" ng-submit="getResults1()">
+                    <div class="form-group">
+                        <span>Select unit number</span>
+                        <div data-ng-dropdown-multiselect="" extra-settings="unitSetting" options="unitnumber1" selected-model="unitnumber1Selected" checkboxes="true"></div><br>
+                        <span>Select topic</span>
+                        <div data-ng-dropdown-multiselect="" extra-settings="topicSetting" options="topic1" selected-model="topic1Selected" checkboxes="true"></div><br>
+                        {% raw %}
+                        <button type="submit" class="btn btn-primary" data-ng-disabled="loading">{{ submitButtonText }}</button>
+                        <p>{{message1}}</p>
+                        {% endraw %}
+                    </div>
+
+                </form>
+                <p>Wordcloud visulization</p>
+                <tang-cloud words="words1" on-click="test(word)" width="500" height="500"></tang-cloud>
+            </div>
         </div>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.2/angular.min.js"></script>
-    <script src="{{ url_for('static', filename='testController.js') }}"></script>
+    <script src="{{ url_for('static', filename='angularjs-dropdown-multiselect.min.js') }}"></script>
     <script src="{{ url_for('static', filename='tangCloud.js') }}"></script>
-
-
+    <script src="{{ url_for('static', filename='testController.js') }}"></script>
 </body>
 
 </html>

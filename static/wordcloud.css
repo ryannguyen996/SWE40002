@@ -1,9 +1,9 @@
 .tangcloud {
     font-family: coolvetica;
     font-weight: bold;
-    height: 1000px;
-    width: 1000px;
-    position:relative;
+    height: 350px;
+    width: 500px;
+    position: relative;
 }
 
 .tangcloud span {
@@ -63,3 +63,23 @@
 .tangcloud-item-hidden {
     visibility: hidden;
 }
+
+.body-content {
+    padding-top: 50px
+}
+
+.checkbox {
+    padding: 0;
+    margin: 0;
+}
+
+.dropdown-menu {
+    overflow: auto !important;
+}
+
+.form-group div {
+    display: inline-block;
+    margin-right: 10px
+}
+
+body { padding-top: 70px; }

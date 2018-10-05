@@ -69,9 +69,11 @@ def clean_text(text):
     text = re.sub(r"\'ll", " will ", text)
     text = re.sub(r",", " ", text)
     text = re.sub(r"\.", " ", text)
-    text = re.sub(r"(<>)", " ", text)
+    text = re.sub(r">", " ", text)
+    text = re.sub(r"<", " ", text)
     text = re.sub(r"!", " ", text)
-    text = re.sub(r"\/", "  ", text)
+    text = re.sub(r":", " ", text)
+    text = re.sub(r"\/", " ", text)
     text = re.sub(r"\/", " ", text)
     text = re.sub(r"\^", " ", text)
     text = re.sub(r"\+", " ", text)
@@ -195,21 +197,22 @@ def getwordcloud():
     try:
         unitnumber = data["unitnumber"]
         topic = data["topic"]
+        #print(unitnumber, topic)
     except:
         return "Error retriveing unit number and topic", 406
 
     lists = []
 
     if (topic == "assessment"):
-        a1 = Result.query.filter_by(unit_number=unitnumber, assessment_topic=1).all()
+        a1 = Result.query.filter(Result.unit_number.in_(unitnumber), Result.assessment_topic==1).all()
     elif(topic == "class"):
-        a1 = Result.query.filter_by(unit_number=unitnumber, class_topic=1).all()
+        a1 = Result.query.filter(Result.unit_number.in_(unitnumber), Result.class_topic==1).all()
     elif(topic == "lecture"):
-        a1 = Result.query.filter_by(unit_number=unitnumber, lecture_topic=1).all()
+        a1 = Result.query.filter(Result.unit_number.in_(unitnumber), Result.lecture_topic==1).all()
     elif(topic == "resource"):
-        a1 = Result.query.filter_by(unit_number=unitnumber, resource_topic=1).all()
+        a1 = Result.query.filter(Result.unit_number.in_(unitnumber), Result.resource_topic==1).all()
     elif(topic == "other"):
-        a1 = Result.query.filter_by(unit_number=unitnumber, other_topic=1).all()
+        a1 = Result.query.filter(Result.unit_number.in_(unitnumber), Result.other_topic==1).all()
 
     if is_empty(a1):
         return "There is no comment satisfies the requirements", 406
@@ -224,16 +227,18 @@ def getwordcloud():
         tokens = tokens + nltk.word_tokenize(a2)
 
     text = nltk.Text(tokens)
-    c = Counter(text).most_common(10)
+    c = Counter(text).most_common(30)
+    #print(c)
 
     try:
         jsonlist = []
-        for i in range(0, 9):
-            dicta = {'id':i+1,'word':c[i][0],'size':scale(c[i][1], 1, 10, c[9][1], c[0][1])}
+        for i in range(0, 29):
+            dicta = {'id':i+1,'word':c[i][0],'size':scale(c[i][1], 1, 10, c[29][1], c[0][1])}
             jsonlist.append(dicta)
         jsonStr = json.dumps(jsonlist)
     except:
         print("Something's wrong")
+        return "Internal server error", 500
 
     return jsonify(jsonStr), 200
     # start job
