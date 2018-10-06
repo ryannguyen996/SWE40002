@@ -231,12 +231,17 @@ def getwordcloud():
 
     text = nltk.Text(tokens)
     c = Counter(text).most_common(30)
-    #print(c)
+    print(c)
 
     try:
         jsonlist = []
-        for i in range(0, 29):
-            dicta = {'id':i+1,'word':c[i][0],'size':scale(c[i][1], 1, 10, c[29][1], c[0][1])}
+        #for i in range(0, 29):
+        #    dicta = {'id':i+1,'word':c[i][0],'size':scale(c[i][1], 1, 10, c[29][1], c[0][1])}
+        #    jsonlist.append(dicta)
+        b = 1
+        for i in c:
+            dicta = {'id':b,'word':i[0],'size':scale(i[1], 1, 10, c[len(c)-1][1], c[0][1])}
+            b += 1
             jsonlist.append(dicta)
         jsonStr = json.dumps(jsonlist)
     except:
