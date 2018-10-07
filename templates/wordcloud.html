@@ -27,6 +27,7 @@
                 <ul class="nav navbar-nav">
                     <li><a href="/">Upload</a></li>
                     <li class="active"><a href="/wordcloud">Wordcloud</a></li>
+                    <li><a href="/statistics">Statistics</a></li>
                     <li><a href="#contact">Contact</a></li>
                 </ul>
             </div>
@@ -44,7 +45,7 @@
                     <div class="form-group">
                         <span>Select unit number</span>
                         <div data-ng-dropdown-multiselect="" extra-settings="unitSetting" options="unitnumber" selected-model="unitnumberSelected" checkboxes="true"></div><br>
-                        <span>Select topic</span>
+                        <span>Select aspect</span>
                         <div data-ng-dropdown-multiselect="" extra-settings="topicSetting" options="topic" selected-model="topicSelected" checkboxes="true"></div><br>
                         {% raw %}
                         <button type="submit" class="btn btn-primary" data-ng-disabled="loading">{{ submitButtonText }}</button>
@@ -62,7 +63,7 @@
                     <div class="form-group">
                         <span>Select unit number</span>
                         <div data-ng-dropdown-multiselect="" extra-settings="unitSetting" options="unitnumber1" selected-model="unitnumber1Selected" checkboxes="true"></div><br>
-                        <span>Select topic</span>
+                        <span>Select aspect</span>
                         <div data-ng-dropdown-multiselect="" extra-settings="topicSetting" options="topic1" selected-model="topic1Selected" checkboxes="true"></div><br>
                         {% raw %}
                         <button type="submit" class="btn btn-primary" data-ng-disabled="loading">{{ submitButtonText }}</button>

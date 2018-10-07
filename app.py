@@ -256,6 +256,9 @@ def getwordcloud():
     # return created job id
     # return job.get_id()
 
+@app.route("/statistics", methods=['GET'])
+def statistics():
+    return render_template('statistics.html')
 
 if __name__ == '__main__':
     app.run()
