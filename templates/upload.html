@@ -2,9 +2,9 @@
 <html class="no-js" lang="en">
 
 <head>
-    <title>Statistics</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Upload</title>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="{{ url_for('static', filename='css/foundation.css') }}" />
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/slick.css') }}" />
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
@@ -16,7 +16,7 @@
     <script src="{{ url_for('static', filename='js/vendor/modernizr.js') }}"></script>
 </head>
 
-<body data-ng-app="myApp" data-ng-controller="TestCtrl">
+<body data-ng-app="myapp" data-ng-controller="UploadController">
 
     <div class="row">
         <div class="large-4 medium-4 small-12 columns">
@@ -34,9 +34,9 @@
                     <!-- Right Nav Section -->
                     <ul class="right">
                         <li><a href="/">Home</a></li>
-                        <li><a href="/upload">Upload</a></li>
+                        <li class="active"><a href="/upload">Upload</a></li>
                         <li><a href="/wordcloud">Wordcloud</a></li>
-                        <li class="active"><a href="/statistics">Statistics</a></li>
+                        <li><a href="/statistics">Statistics</a></li>
                         <li><a href="/about">About Us</a></li>
                     </ul>
                 </section>
@@ -48,32 +48,18 @@
     </div>
     <br />
 
+    <h2>Upload CSV file for processing</h2>
     <div class="container">
         <div class="row">
-            <form role="form" data-ng-submit="">
-                <div class="form-group">
-                    <p>Select graph you want to display</p>
-                    <select ng-model="selection" style="height: auto;width: auto;">
-                        <option value="">Please select</option>
-                        <option value="1">Multiple categories per comment</option>
-                        <option value="2">Number of comment per category</option>
-                        <option value="3">Comment length distribution</option>
-                    </select>
-                </div>
-            </form>
+            <input type="file" data-file-change="upload">
+            <img src="{{ url_for('static', filename='img/spinner.gif') }}" style="width:32px;height:32px;" data-ng-show="loading">
         </div>
-        <br />
-        <div class="row" ng-show="selection==1">
-            <img src="{{ url_for('static', filename='img/Noname3.jpg') }}">
-        </div>
-        <div class="row" ng-show="selection==2">
-            <img src="{{ url_for('static', filename='img/Noname4.jpg') }}">
-        </div>
-        <div class="row" ng-show="selection==3">
-            <img src="{{ url_for('static', filename='img/Noname5.jpg') }}">
+        <div class="row">
+            {% raw %}
+            <p>{{message}}</p>
+            {% endraw %}
         </div>
     </div>
-    <br /><br />
 
     <div class="footer-sec" style="padding-left: 25px;">
         <div class="row">
@@ -145,7 +131,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.2/angular.min.js"></script>
-    <script src="{{ url_for('static', filename='js/statistics.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/upload.js') }}"></script>
 </body>
 
 </html>

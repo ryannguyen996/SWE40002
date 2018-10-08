@@ -149,10 +149,13 @@ def is_empty(any_structure):
     else:
         return True
 
-
 @app.route("/", methods=['GET'])
 def index():
     return render_template('index.html')
+
+@app.route("/upload", methods=['GET'])
+def upload():
+    return render_template('upload.html')
 
 
 @app.route("/uploads", methods=['POST'])
@@ -259,6 +262,15 @@ def getwordcloud():
 @app.route("/statistics", methods=['GET'])
 def statistics():
     return render_template('statistics.html')
+
+@app.route("/about", methods=['GET'])
+def about():
+    return render_template('about.html')
+
+@app.errorhandler(404)
+def page_not_found(e):
+    # note that we set the 404 status explicitly
+    return render_template('404.html'), 404
 
 if __name__ == '__main__':
     app.run()

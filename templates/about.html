@@ -36,8 +36,8 @@
                         <li><a href="/">Home</a></li>
                         <li><a href="/upload">Upload</a></li>
                         <li><a href="/wordcloud">Wordcloud</a></li>
-                        <li class="active"><a href="/statistics">Statistics</a></li>
-                        <li><a href="/about">About Us</a></li>
+                        <li><a href="/statistics">Statistics</a></li>
+                        <li class="active"><a href="/about">About Us</a></li>
                     </ul>
                 </section>
             </nav>
@@ -49,31 +49,20 @@
     <br />
 
     <div class="container">
-        <div class="row">
-            <form role="form" data-ng-submit="">
-                <div class="form-group">
-                    <p>Select graph you want to display</p>
-                    <select ng-model="selection" style="height: auto;width: auto;">
-                        <option value="">Please select</option>
-                        <option value="1">Multiple categories per comment</option>
-                        <option value="2">Number of comment per category</option>
-                        <option value="3">Comment length distribution</option>
-                    </select>
+        <h2>About Us</h2>
+        <div class="content-sec inner-sec">
+            <div class="row">
+                <div>
+                    <p><img src="{{ url_for('static', filename='img/team/mylan.png') }}" alt="mylan" height="100" width="100"><b>Melanie My Lan Koo Tze Mew</b> - Team leader.</p>
+                    <p><img src="{{ url_for('static', filename='img/team/ryan.png') }}" alt="ryan" height="100" width="100"><b>Nam Hung Nguyen</b> - Software Engineer.</p>
+                    <p><img src="{{ url_for('static', filename='img/team/tommy.png') }}" alt="tommy" height="100" width="100"><b>Tommy Sam</b> - Management Planner.</p>
+                    <p><img src="{{ url_for('static', filename='img/team/austin.png') }}" alt="austin" height="100" width="100"><b>Ba Tri Huynh</b> - Software Engineer.</p>
+                    <p><img src="{{ url_for('static', filename='img/team/sok.png') }}" alt="sok" height="100" width="100"><b>Soklay Chea</b> - Quality assurance.</p>
+                    <p><img src="{{ url_for('static', filename='img/team/michael.png') }}" alt="michael" height="100" width="100"><b>Michael Mariani</b> - Support.</p>
                 </div>
-            </form>
-        </div>
-        <br />
-        <div class="row" ng-show="selection==1">
-            <img src="{{ url_for('static', filename='img/Noname3.jpg') }}">
-        </div>
-        <div class="row" ng-show="selection==2">
-            <img src="{{ url_for('static', filename='img/Noname4.jpg') }}">
-        </div>
-        <div class="row" ng-show="selection==3">
-            <img src="{{ url_for('static', filename='img/Noname5.jpg') }}">
+            </div>
         </div>
     </div>
-    <br /><br />
 
     <div class="footer-sec" style="padding-left: 25px;">
         <div class="row">
@@ -145,7 +134,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.2/angular.min.js"></script>
-    <script src="{{ url_for('static', filename='js/statistics.js') }}"></script>
 </body>
 
 </html>

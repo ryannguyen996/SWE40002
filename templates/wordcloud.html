@@ -1,39 +1,52 @@
 <!DOCTYPE html>
-<html lang="en">
+<html class="no-js" lang="en">
 
 <head>
     <title>Wordcount</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/foundation.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/slick.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/responsive.css') }}" />
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
-    <link rel="stylesheet" href="{{ url_for('static', filename='wordcloud.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/wordcloud.css') }}">
     <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon" />
+    <script src="{{ url_for('static', filename='js/vendor/modernizr.js') }}"></script>
 </head>
 
 <body data-ng-app="myApp" data-ng-controller="TestCtrl" data-ng-init="lists={{lists}}">
 
-    <nav class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand">Miner for student feedback</a>
-            </div>
-            <div id="navbar" class="collapse navbar-collapse">
-                <ul class="nav navbar-nav">
-                    <li><a href="/">Upload</a></li>
-                    <li class="active"><a href="/wordcloud">Wordcloud</a></li>
-                    <li><a href="/statistics">Statistics</a></li>
-                    <li><a href="#contact">Contact</a></li>
-                </ul>
-            </div>
-            <!--/.nav-collapse -->
+    <div class="row">
+        <div class="large-4 medium-4 small-12 columns">
+            <div id="logo"><a href="index.html"><img style="padding-left: 20px;" src="{{ url_for('static', filename='img/main2.png') }}" alt="Conmpany Name"></a></div>
         </div>
-    </nav>
+        <div class="large-8 medium-8 small-12 columns">
+            <nav class="top-bar" data-topbar role="navigation">
+                <ul class="title-area">
+                    <li class="name"> </li>
+                    <!-- Remove the class "menu-icon" to get rid of menu icon. Take out "Menu" to just have icon alone -->
+                    <li class="toggle-topbar menu-icon"><a href="#"><span>Menu</span></a></li>
+                </ul>
+
+                <section class="top-bar-section navbar-right">
+                    <!-- Right Nav Section -->
+                    <ul class="right">
+                        <li><a href="/">Home</a></li>
+                        <li><a href="/upload">Upload</a></li>
+                        <li class="active"><a href="/wordcloud">Wordcloud</a></li>
+                        <li><a href="/statistics">Statistics</a></li>
+                        <li><a href="/about">About Us</a></li>
+                    </ul>
+                </section>
+            </nav>
+        </div>
+    </div>
+    <div class="inner-banner">
+        <img src="{{ url_for('static', filename='img/about-banner.jpg') }}" alt="About Us">
+    </div>
+    <br />
 
     <div class="container">
         <div class="row">
@@ -55,7 +68,7 @@
 
                 </form>
                 <p>Wordcloud visulization</p>
-                <tang-cloud words="words" on-click="test(word)" width="500" height="500"></tang-cloud>
+                <tang-cloud words="words" on-click="test(word)" width="350" height="500"></tang-cloud>
             </div>
 
             <div class="col-xs-6" ng-show="compare">
@@ -73,26 +86,84 @@
 
                 </form>
                 <p>Wordcloud visulization</p>
-                <tang-cloud words="words1" on-click="test(word)" width="500" height="500"></tang-cloud>
+                <tang-cloud words="words1" on-click="test(word)" width="350" height="500"></tang-cloud>
             </div>
         </div>
     </div>
 
-    <div class="footer navbar-fixed-bottom">
-    <footer class="footer">
-        <div class="container">
-            <p class="text-muted">© Group 25. SWE40001-SWE40002 2018.</p>
+    <div class="footer-sec" style="padding-left: 25px;">
+        <div class="row">
+            <div class="large-3 medium-3 small-12 columns">
+                <div class="foot-1">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="/" title="Home">Home</a></li>
+                        <li><a href="/about" title="About Us">About Us</a></li>
+                        <li><a href="/upload" title="Upload">Upload</a></li>
+                        <li><a href="/wordcloud" title="Wordcloud">Wordcloud</a></li>
+                        <li><a href="/statistics" title="Statistic">Statistic</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="large-3 medium-3 small-12 columns">
+                <div class="foot-1">
+                    <h4>Services</h4>
+                    <ul>
+                        <li><a href="services.html" title="Services">Our application info</a></li>
+                        <li><a href="services.html" title="Services">Our team</a></li>
+                        <li><a href="services.html" title="Services">Upload data for processing</a></li>
+                        <li><a href="services.html" title="Services">Generate wordcloud</a></li>
+                        <li><a href="services.html" title="Services">Statistic data</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="large-4 medium-3 small-12 columns">
+                <div class="foot-1">
+                    <h4>Contact Us</h4>
+                    <ul>
+                        <li><a href="mailto:info@companyname.com" target="_blank">group25@gmail.com</a></li>
+                        <li><a href="tel:(01) 800 854 633" target="_blank">0402778778</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="large-2 medium-3 small-12 columns">
+                <div class="foot-1">
+                    <h4>Follow Us</h4>
+                    <div class="social" style="background: url({{ url_for('static', filename='img/social.png') }}) no-repeat">
+                        <div class="facebook"><a href="#" class="facebook"></a></div>
+                        <div class="twitter"><a href="#" class="twitter"></a></div>
+                        <div class="gplus"><a href="#" class="gplus"></a></div>
+                    </div>
+                </div>
+            </div>
+
         </div>
-    </footer>
+    </div>
+
+    <div class="copy">
+        <div class="row">
+            <div class="large-12 columns">
+                Copyright &copy; 2016 SleekBiz. All Rights Reserved. Free <a href="http://www.pfind.com/goodies/sleekbiz/">SleekBiz</a> Template by <a href="http://www.pfind.com/goodies/">pFind Goodies</a>
+            </div>
+        </div>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="{{ url_for('static', filename='js/foundation.min.js') }}"></script>
+    <script>
+        $(document).foundation();
+
+    </script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/all.js') }}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.2/angular.min.js"></script>
-    <script src="{{ url_for('static', filename='angularjs-dropdown-multiselect.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='tangCloud.js') }}"></script>
-    <script src="{{ url_for('static', filename='testController.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/vendor/angularjs-dropdown-multiselect.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/vendor/tangCloud.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/wordCloud.js') }}"></script>
 </body>
 
 </html>
