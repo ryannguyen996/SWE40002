@@ -5,7 +5,34 @@ app.controller('TestCtrl', ['$scope', '$http', '$timeout', '$element', '$compile
     $scope.result = false;
 
     $scope.unitnumberSelected = [];
-    $scope.unitnumber = [];
+    $scope.unitnumber = [{
+        id: 1,
+        label: "COS10004"
+    },
+       {
+        id: 2,
+        label: "COS20001"
+    },
+                         {
+        id: 3,
+        label: "SWE20004"
+    },
+                         {
+        id: 4,
+        label: "SWE40002"
+    },
+                         {
+        id: 5,
+        label: "ICT20002"
+    },
+                         {
+        id: 6,
+        label: "ENG80002"
+    },
+                         {
+        id: 7,
+        label: "MME30001"
+    }];
     $scope.topicSelected = [];
     $scope.topic = [{
         id: "assessment",
@@ -24,7 +51,7 @@ app.controller('TestCtrl', ['$scope', '$http', '$timeout', '$element', '$compile
         label: "other"
     }];
     $scope.unitnumber1Selected = [];
-    $scope.unitnumber1 = [];
+    $scope.unitnumber1 = $scope.unitnumber;
     $scope.topic1Selected = [];
     $scope.topic1 = $scope.topic;
 
@@ -41,29 +68,29 @@ app.controller('TestCtrl', ['$scope', '$http', '$timeout', '$element', '$compile
         smartButtonMaxItems: 1
     };
 
-    angular.forEach($scope.lists, function (value, index) {
-        $scope.topic.push({
-            id: value,
-            label: value
-        });
-        $scope.topic1.push({
-            id: value,
-            label: value
-        });
-    });
-
-    $scope.$watch('lists', function (value) {
-        angular.forEach($scope.lists, function (value, index) {
-            $scope.unitnumber.push({
-                id: value,
-                label: value
-            });
-            $scope.unitnumber1.push({
-                id: value,
-                label: value
-            });
-        });
-    });
+//    angular.forEach($scope.lists, function (value, index) {
+//        $scope.topic.push({
+//            id: value,
+//            label: value
+//        });
+//        $scope.topic1.push({
+//            id: value,
+//            label: value
+//        });
+//    });
+//
+//    $scope.$watch('lists', function (value) {
+//        angular.forEach($scope.lists, function (value, index) {
+//            $scope.unitnumber.push({
+//                id: value,
+//                label: value
+//            });
+//            $scope.unitnumber1.push({
+//                id: value,
+//                label: value
+//            });
+//        });
+//    });
 
     $scope.getResults = function () {
         $scope.words = [];
