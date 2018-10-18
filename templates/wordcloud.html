@@ -62,13 +62,14 @@
                         <div data-ng-dropdown-multiselect="" extra-settings="topicSetting" options="topic" selected-model="topicSelected" checkboxes="true"></div><br>
                         {% raw %}
                         <button type="submit" class="btn btn-primary" data-ng-disabled="loading">{{ submitButtonText }}</button>
-                        <p>{{message}}</p>
+                        <p ng-show="message">{{message}}</p>
+                        <p ng-show="count">{{count}}</p>
                         {% endraw %}
                     </div>
 
                 </form>
                 <p>Wordcloud visulization</p>
-                <tang-cloud words="words" on-click="test(word)" width="350" height="500"></tang-cloud>
+                <tang-cloud words="words" on-click="test(word)" width="350" height="400"></tang-cloud>
             </div>
 
             <div class="col-xs-6" ng-show="compare">
@@ -80,13 +81,14 @@
                         <div data-ng-dropdown-multiselect="" extra-settings="topicSetting" options="topic1" selected-model="topic1Selected" checkboxes="true"></div><br>
                         {% raw %}
                         <button type="submit" class="btn btn-primary" data-ng-disabled="loading">{{ submitButtonText }}</button>
-                        <p>{{message1}}</p>
+                        <p ng-show="message1">{{message1}}</p>
+                        <p ng-show="count1">{{count1}}</p>
                         {% endraw %}
                     </div>
 
                 </form>
                 <p>Wordcloud visulization</p>
-                <tang-cloud words="words1" on-click="test(word)" width="350" height="500"></tang-cloud>
+                <tang-cloud words="words1" on-click="test(word)" width="350" height="400"></tang-cloud>
             </div>
         </div>
     </div>

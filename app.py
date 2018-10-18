@@ -9,11 +9,16 @@ import numpy as np
 import string
 import re
 import warnings
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, make_response
 from flask_sqlalchemy import SQLAlchemy
 from collections import Counter
+import random
+from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
+from matplotlib.figure import Figure
+from io import BytesIO
 
-csvformat = ['Student ID', 'Unit Number', 'Comments', 'Satisfaction']
+
+csvformat = ['Student ID\tUnit Number\tComments\tSatisfaction']
 APP_ROOT = os.path.dirname(os.path.abspath(__file__))
 app = Flask(__name__)
 app.config.from_object(os.environ['APP_SETTINGS'])
@@ -106,9 +111,10 @@ def classifier(destination):
         assessment0 = joblib.load('classifiers/Assessment.pkl')
         resource0 = joblib.load('classifiers/Resource.pkl')
         other0 = joblib.load('classifiers/Other.pkl')
+        sentiment0 = joblib.load('classifiers/SGDClassifier.pkl')
 
     with open(destination, 'r', encoding='utf-8-sig') as csv_file:
-        csv_reader = csv.reader(csv_file, delimiter=',')
+        csv_reader = csv.reader(csv_file, delimiter='\t')
         line_count = 0
         for row in csv_reader:
             if line_count == 0:
@@ -121,20 +127,20 @@ def classifier(destination):
                 try:
                     result = Result(
                         student_id=int(row[0]),
-                        unit_number=int(row[1]),
+                        unit_number=str(row[1]),
                         comment=str(row[2]),
                         satisfaction=int(row[3]),
                         assessment_topic=int(assessment0.predict(comments).item(0)),
                         class_topic=int(class0.predict(comments).item(0)),
                         lecture_topic=int(lecture0.predict(comments).item(0)),
                         other_topic=int(other0.predict(comments).item(0)),
-                        resource_topic=int(resource0.predict(comments).item(0))
+                        resource_topic=int(resource0.predict(comments).item(0)),
+                        sentiment=int(sentiment0.predict(comments).item(0))
                     )
                     db.session.add(result)
                     db.session.commit()
                     print(result.id)
                 except:
-                    # errors.append("Unable to add item to database.")
                     print(f'ERROR')
             print(f'Processed {line_count} lines.')
 
@@ -203,22 +209,27 @@ def getwordcloud():
     try:
         unitnumber = data["unitnumber"]
         topic = data["topic"]
-        #print(unitnumber, topic)
+        print(topic)
     except:
         return "Error retriveing unit number and topic", 406
 
     lists = []
 
-    if (topic == "assessment"):
-        a1 = Result.query.filter(Result.unit_number.in_(unitnumber), Result.assessment_topic==1).all()
-    elif(topic == "class"):
-        a1 = Result.query.filter(Result.unit_number.in_(unitnumber), Result.class_topic==1).all()
-    elif(topic == "lecture"):
-        a1 = Result.query.filter(Result.unit_number.in_(unitnumber), Result.lecture_topic==1).all()
-    elif(topic == "resource"):
-        a1 = Result.query.filter(Result.unit_number.in_(unitnumber), Result.resource_topic==1).all()
-    elif(topic == "other"):
-        a1 = Result.query.filter(Result.unit_number.in_(unitnumber), Result.other_topic==1).all()
+    a1 = Result.query
+    a1 = a1.filter(Result.unit_number.in_(unitnumber))
+
+    if("assessment" in topic):
+        a1 = a1.filter(Result.assessment_topic==1)
+    if("class" in topic):
+        a1 = a1.filter(Result.class_topic==1)
+    if("lecture" in topic):
+        a1 = a1.filter(Result.lecture_topic==1)
+    if("resource" in topic):
+        a1 = a1.filter(Result.resource_topic==1)
+    if("other" in topic):
+        a1 = a1.filter(Result.other_topic==1)
+
+    a1 = a1.all()
 
     if is_empty(a1):
         return "There is no comment satisfies the requirements", 406
@@ -238,12 +249,9 @@ def getwordcloud():
 
     try:
         jsonlist = []
-        #for i in range(0, 29):
-        #    dicta = {'id':i+1,'word':c[i][0],'size':scale(c[i][1], 1, 10, c[29][1], c[0][1])}
-        #    jsonlist.append(dicta)
         b = 1
         for i in c:
-            dicta = {'id':b,'word':i[0],'size':scale(i[1], 1, 10, c[len(c)-1][1], c[0][1])}
+            dicta = {'id' :b ,'word' :i[0] ,'size': scale(i[1], 1, 10, c[len(c)-1][1], c[0][1])}
             b += 1
             jsonlist.append(dicta)
         jsonStr = json.dumps(jsonlist)
@@ -252,16 +260,68 @@ def getwordcloud():
         return "Internal server error", 500
 
     return jsonify(jsonStr), 200
-    # start job
-    # job = q.enqueue_call(
-    #     func=count_and_save_words, args=(url,), result_ttl=5000
-    # )
-    # return created job id
-    # return job.get_id()
+
+@app.route('/getwordcloudcount', methods=['POST'])
+def getwordcloudcount():
+    # get url
+    data = json.loads(request.data.decode())
+
+    try:
+        unitnumber = data["unitnumber"]
+        topic = data["topic"]
+    except:
+        return " ", 406
+
+    lists = []
+
+    a1 = Result.query
+    a1 = a1.filter(Result.unit_number.in_(unitnumber))
+
+    if("assessment" in topic):
+        a1 = a1.filter(Result.assessment_topic==1)
+    if("class" in topic):
+        a1 = a1.filter(Result.class_topic==1)
+    if("lecture" in topic):
+        a1 = a1.filter(Result.lecture_topic==1)
+    if("resource" in topic):
+        a1 = a1.filter(Result.resource_topic==1)
+    if("other" in topic):
+        a1 = a1.filter(Result.other_topic==1)
+
+    a1 = a1.all()
+    if is_empty(a1):
+        return " ", 406
+
+    for a2 in a1:
+        lists.append(a2.comment)
+
+    return ("There are {} comments satisfy the selection" ).format(str(len(lists))),200
+
 
 @app.route("/statistics", methods=['GET'])
 def statistics():
-    return render_template('statistics.html')
+    #lists = []
+    #a1 = Result.query.with_entities(Result.unit_number).order_by(Result.unit_number).distinct()
+    #for a2 in a1:
+    #    lists.append(a2.unit_number)
+    #return render_template('statistics.html', lists=lists)
+    return render_template('uc.html')
+
+@app.route("/getimage", methods=['GET'])
+def getimage():
+    fig = Figure()
+    axis = fig.add_subplot(1, 1, 1)
+
+    xs = range(100)
+    ys = [random.randint(1, 50) for x in xs]
+
+    axis.plot(xs, ys)
+    canvas = FigureCanvas(fig)
+    output = BytesIO()
+    canvas.print_png(output)
+    response = make_response(output.getvalue())
+    response.mimetype = 'image/png'
+    return response
 
 @app.route("/about", methods=['GET'])
 def about():

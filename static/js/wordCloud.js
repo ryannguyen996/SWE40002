@@ -3,36 +3,9 @@ app.controller('TestCtrl', ['$scope', '$http', '$timeout', '$element', '$compile
     $scope.loading = false;
     $scope.submitButtonText = 'Submit';
     $scope.result = false;
-
+    console.log($scope.lists);
     $scope.unitnumberSelected = [];
-    $scope.unitnumber = [{
-        id: 1,
-        label: "COS10004"
-    },
-       {
-        id: 2,
-        label: "COS20001"
-    },
-                         {
-        id: 3,
-        label: "SWE20004"
-    },
-                         {
-        id: 4,
-        label: "SWE40002"
-    },
-                         {
-        id: 5,
-        label: "ICT20002"
-    },
-                         {
-        id: 6,
-        label: "ENG80002"
-    },
-                         {
-        id: 7,
-        label: "MME30001"
-    }];
+    $scope.unitnumber = [];
     $scope.topicSelected = [];
     $scope.topic = [{
         id: "assessment",
@@ -51,7 +24,7 @@ app.controller('TestCtrl', ['$scope', '$http', '$timeout', '$element', '$compile
         label: "other"
     }];
     $scope.unitnumber1Selected = [];
-    $scope.unitnumber1 = $scope.unitnumber;
+    $scope.unitnumber1 = [];
     $scope.topic1Selected = [];
     $scope.topic1 = $scope.topic;
 
@@ -62,53 +35,65 @@ app.controller('TestCtrl', ['$scope', '$http', '$timeout', '$element', '$compile
         smartButtonMaxItems: 4
     };
     $scope.topicSetting = {
-        scrollable: true,
-        scrollableHeight: '200px',
-        selectionLimit: 1,
-        smartButtonMaxItems: 1
     };
 
-//    angular.forEach($scope.lists, function (value, index) {
-//        $scope.topic.push({
-//            id: value,
-//            label: value
-//        });
-//        $scope.topic1.push({
-//            id: value,
-//            label: value
-//        });
-//    });
-//
-//    $scope.$watch('lists', function (value) {
 //        angular.forEach($scope.lists, function (value, index) {
-//            $scope.unitnumber.push({
+//            $scope.topic.push({
 //                id: value,
 //                label: value
 //            });
-//            $scope.unitnumber1.push({
+//            $scope.topic1.push({
 //                id: value,
 //                label: value
 //            });
 //        });
-//    });
+
+    $scope.$watch('lists', function (value) {
+        angular.forEach($scope.lists, function (value, index) {
+            $scope.unitnumber.push({
+                id: value,
+                label: value
+            });
+            $scope.unitnumber1.push({
+                id: value,
+                label: value
+            });
+        });
+    });
 
     $scope.getResults = function () {
         $scope.words = [];
         var userInput0 = [];
+        var userInput1 = [];
         angular.forEach($scope.unitnumberSelected, function (value, index) {
             userInput0.push(value.id);
+        });
+        angular.forEach($scope.topicSelected, function (value, index) {
+            userInput1.push(value.id);
         });
         $scope.message = "";
         $scope.loading = true;
         $scope.submitButtonText = 'Loading...';
-        if (userInput0.length === 0 || $scope.topicSelected.length === 0) {
+        if (userInput0.length === 0 || userInput1.length === 0) {
             $scope.message = "Invalid input";
             $scope.loading = false;
             $scope.submitButtonText = 'Submit';
         } else {
+            $http.post('/getwordcloudcount', {
+                "unitnumber": userInput0,
+                "topic": userInput1
+            }).
+            then(function (response) {
+                    console.log(response.data);
+                    $scope.count = response.data;
+                },
+                function (response) {
+                    console.log(response.data);
+                    $scope.count = response.data;
+                });
             $http.post('/getwordcloud', {
                 "unitnumber": userInput0,
-                "topic": $scope.topicSelected[0].id
+                "topic": userInput1
             }).
             then(function (response) {
                     $scope.words = JSON.parse(response.data);
@@ -126,21 +111,37 @@ app.controller('TestCtrl', ['$scope', '$http', '$timeout', '$element', '$compile
 
     $scope.getResults1 = function () {
         $scope.words1 = [];
+        var userInput0 = [];
         var userInput1 = [];
         angular.forEach($scope.unitnumber1Selected, function (value, index) {
+            userInput0.push(value.id);
+        });
+        angular.forEach($scope.topic1Selected, function (value, index) {
             userInput1.push(value.id);
         });
         $scope.message1 = "";
         $scope.loading = true;
         $scope.submitButtonText = 'Loading...';
-        if (userInput1.length === 0 || $scope.topicSelected.length === 0) {
+        if (userInput1.length === 0 || userInput0 === 0) {
             $scope.message1 = "Invalid input";
             $scope.loading = false;
             $scope.submitButtonText = 'Submit';
         } else {
+            $http.post('/getwordcloudcount', {
+                "unitnumber": userInput0,
+                "topic": userInput1
+            }).
+            then(function (response) {
+                    console.log(response.data);
+                    $scope.count1 = response.data;
+                },
+                function (response) {
+                    console.log(response.data);
+                    $scope.count1 = response.data;
+                });
             $http.post('/getwordcloud', {
-                "unitnumber": userInput1,
-                "topic": $scope.topic1Selected[0].id
+                "unitnumber": userInput0,
+                "topic": userInput1
             }).
             then(function (response) {
                     $scope.words1 = JSON.parse(response.data);
