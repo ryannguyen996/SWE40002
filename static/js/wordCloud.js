@@ -65,6 +65,7 @@ app.controller('TestCtrl', ['$scope', '$http', '$timeout', '$element', '$compile
         $scope.words = [];
         var userInput0 = [];
         var userInput1 = [];
+        $scope.count = "";
         angular.forEach($scope.unitnumberSelected, function (value, index) {
             userInput0.push(value.id);
         });
@@ -113,6 +114,7 @@ app.controller('TestCtrl', ['$scope', '$http', '$timeout', '$element', '$compile
         $scope.words1 = [];
         var userInput0 = [];
         var userInput1 = [];
+        $scope.count1 = "";
         angular.forEach($scope.unitnumber1Selected, function (value, index) {
             userInput0.push(value.id);
         });
