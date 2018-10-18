@@ -297,6 +297,44 @@ def getwordcloudcount():
 
     return ("There are {} comments satisfy the selection" ).format(str(len(lists))),200
 
+@app.route('/getavg', methods=['POST'])
+def getavg():
+    # get url
+    data = json.loads(request.data.decode())
+
+    try:
+        unitnumber = data["unitnumber"]
+        topic = data["topic"]
+    except:
+        return " ", 406
+
+    a3 = 0
+    a4 = 0
+    a1 = Result.query
+    a1 = a1.filter(Result.unit_number.in_(unitnumber))
+
+    if("assessment" in topic):
+        a1 = a1.filter(Result.assessment_topic==1)
+    if("class" in topic):
+        a1 = a1.filter(Result.class_topic==1)
+    if("lecture" in topic):
+        a1 = a1.filter(Result.lecture_topic==1)
+    if("resource" in topic):
+        a1 = a1.filter(Result.resource_topic==1)
+    if("other" in topic):
+        a1 = a1.filter(Result.other_topic==1)
+
+    a1 = a1.all()
+    if is_empty(a1):
+        return " ", 406
+
+    for a2 in a1:
+        a3 += a2.satisfaction
+        a4 += 1
+
+    a5 = a3/a4
+    print(a5)
+    return ("The average sastisfaction score is {0:.2f} " ).format(round(a5,2)),200
 
 @app.route("/statistics", methods=['GET'])
 def statistics():

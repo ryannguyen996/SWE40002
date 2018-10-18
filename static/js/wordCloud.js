@@ -66,6 +66,7 @@ app.controller('TestCtrl', ['$scope', '$http', '$timeout', '$element', '$compile
         var userInput0 = [];
         var userInput1 = [];
         $scope.count = "";
+        $scope.avg = "";
         angular.forEach($scope.unitnumberSelected, function (value, index) {
             userInput0.push(value.id);
         });
@@ -92,6 +93,18 @@ app.controller('TestCtrl', ['$scope', '$http', '$timeout', '$element', '$compile
                     console.log(response.data);
                     $scope.count = response.data;
                 });
+            $http.post('/getavg', {
+                "unitnumber": userInput0,
+                "topic": userInput1
+            }).
+            then(function (response) {
+                    console.log(response.data);
+                    $scope.avg = response.data;
+                },
+                function (response) {
+                    console.log(response.data);
+                    $scope.avg = response.data;
+                });
             $http.post('/getwordcloud', {
                 "unitnumber": userInput0,
                 "topic": userInput1
@@ -115,6 +128,7 @@ app.controller('TestCtrl', ['$scope', '$http', '$timeout', '$element', '$compile
         var userInput0 = [];
         var userInput1 = [];
         $scope.count1 = "";
+        $scope.avg1= "";
         angular.forEach($scope.unitnumber1Selected, function (value, index) {
             userInput0.push(value.id);
         });
@@ -140,6 +154,18 @@ app.controller('TestCtrl', ['$scope', '$http', '$timeout', '$element', '$compile
                 function (response) {
                     console.log(response.data);
                     $scope.count1 = response.data;
+                });
+            $http.post('/getavg', {
+                "unitnumber": userInput0,
+                "topic": userInput1
+            }).
+            then(function (response) {
+                    console.log(response.data);
+                    $scope.avg1 = response.data;
+                },
+                function (response) {
+                    console.log(response.data);
+                    $scope.avg1 = response.data;
                 });
             $http.post('/getwordcloud', {
                 "unitnumber": userInput0,
