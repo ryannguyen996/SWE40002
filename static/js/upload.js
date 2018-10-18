@@ -48,6 +48,7 @@ app.directive('fileChange', function() {
 //
 app.controller('UploadController', function($log, $scope, $http, Uploader) {
     $scope.loading = false;
+    $scope.message ="";
 
     $scope.upload = function(files) {
         $scope.loading = true;
