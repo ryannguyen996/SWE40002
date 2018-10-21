@@ -5,7 +5,7 @@ import nltk
 from nltk.stem import WordNetLemmatizer
 from nltk.corpus import stopwords
 from sklearn.externals import joblib
-import numpy as np
+import numpy
 import string
 import re
 import warnings
@@ -30,7 +30,7 @@ from models import Result
 
 
 def assert_format(destination):
-    if destination.lower().endswith('.csv'):
+    if destination.lower().endswith('.tsv'):
         return True
     else:
         return False
@@ -149,15 +149,44 @@ def scale(unscaledNum, minAllowed, maxAllowed, minCount, maxCount):
     return int(round((maxAllowed - minAllowed) * (unscaledNum - minCount) / (maxCount - minCount) + minAllowed))
 
 
+def color(number):
+    if(number == 0.0):
+        return "#ff0040"
+    if(number == 0.1):
+        return "#ff0000"
+    if(number == 0.2):
+        return "#ff4000"
+    if(number == 0.3):
+        return "#ff8000"
+    if(number == 0.4):
+        return "#ffbf00"
+    if(number == 0.5):
+        return "#ffff00"
+    if(number == 0.6):
+        return "#bfff00"
+    if(number == 0.7):
+        return "#80ff00"
+    if(number == 0.8):
+        return "#40ff00"
+    if(number == 0.9):
+        return "#00ff00"
+    if(number == 1.0):
+        return "#00ff40"
+    if(number > 1.0):
+        return "#00ff00"
+
+
 def is_empty(any_structure):
     if any_structure:
         return False
     else:
         return True
 
+
 @app.route("/", methods=['GET'])
 def index():
     return render_template('index.html')
+
 
 @app.route("/upload", methods=['GET'])
 def upload():
@@ -219,47 +248,90 @@ def getwordcloud():
     a1 = a1.filter(Result.unit_number.in_(unitnumber))
 
     if("assessment" in topic):
-        a1 = a1.filter(Result.assessment_topic==1)
+        a1 = a1.filter(Result.assessment_topic == 1)
     if("class" in topic):
-        a1 = a1.filter(Result.class_topic==1)
+        a1 = a1.filter(Result.class_topic == 1)
     if("lecture" in topic):
-        a1 = a1.filter(Result.lecture_topic==1)
+        a1 = a1.filter(Result.lecture_topic == 1)
     if("resource" in topic):
-        a1 = a1.filter(Result.resource_topic==1)
+        a1 = a1.filter(Result.resource_topic == 1)
     if("other" in topic):
-        a1 = a1.filter(Result.other_topic==1)
+        a1 = a1.filter(Result.other_topic == 1)
 
     a1 = a1.all()
 
     if is_empty(a1):
         return "There is no comment satisfies the requirements", 406
 
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore", category=UserWarning)
+        lecture0 = joblib.load('classifiers/Lecture.pkl')
+        class0 = joblib.load('classifiers/Class.pkl')
+        assessment0 = joblib.load('classifiers/Assessment.pkl')
+        resource0 = joblib.load('classifiers/Resource.pkl')
+        other0 = joblib.load('classifiers/Other.pkl')
+
     for a2 in a1:
+        temp = re.split('\band\b|,|\.', a2.comment, flags=re.IGNORECASE)
+        temp1 = ""
+        for a3 in temp:
+            a4 = clean_text(str(a3))
+            a4 = [a4]
+            if("assessment" in topic):
+                if(assessment0.predict(a4).item(0) == 1):
+                    temp1 += a3
+            elif("class" in topic):
+                if(class0.predict(a4).item(0) == 1):
+                    temp1 += a3
+            elif("lecture" in topic):
+                if(lecture0.predict(a4).item(0) == 1):
+                    temp1 += a3
+            elif("resource" in topic):
+                if(resource0.predict(a4).item(0) == 1):
+                    temp1 += a3
+            elif("other" in topic):
+                if(other0.predict(a4).item(0) == 1):
+                    temp1 += a3
+        a2.comment = temp1
+
+    for a2 in a1:
+        a2.comment = clean_text(str(a2.comment))
         lists.append(a2.comment)
 
     tokens = []
 
     for a2 in lists:
-        a2 = clean_text(str(a2))
         tokens = tokens + nltk.word_tokenize(a2)
 
     text = nltk.Text(tokens)
+
     c = Counter(text).most_common(30)
     print(c)
 
-    try:
-        jsonlist = []
-        b = 1
-        for i in c:
-            dicta = {'id' :b ,'word' :i[0] ,'size': scale(i[1], 1, 10, c[len(c)-1][1], c[0][1])}
-            b += 1
-            jsonlist.append(dicta)
-        jsonStr = json.dumps(jsonlist)
-    except:
-        print("Something's wrong")
-        return "Internal server error", 500
+    jsonlist = []
+#calulate size
+    width = 400
+    maxCount = c[0][1]
+    minCount = c[len(c)-1][1]
+    maxWordSize = width * 0.15
+    minWordSize = maxWordSize / 5
+    spread = maxCount - minCount
+    if (spread <= 0):
+        spread = 1
+    step = (maxWordSize - minWordSize) / spread
 
+    for i in c:
+        e = 0
+        for a2 in a1:
+            if i[0] in a2.comment:
+                e += a2.sentiment
+        e = round((float(e)/i[1]), 1)
+        dicta = {'text': i[0], 'size': round(maxWordSize - ((maxCount - i[1])*step)), 'color': color(e)}
+        jsonlist.append(dicta)
+
+    jsonStr = json.dumps(jsonlist)
     return jsonify(jsonStr), 200
+
 
 @app.route('/getwordcloudcount', methods=['POST'])
 def getwordcloudcount():
@@ -278,15 +350,15 @@ def getwordcloudcount():
     a1 = a1.filter(Result.unit_number.in_(unitnumber))
 
     if("assessment" in topic):
-        a1 = a1.filter(Result.assessment_topic==1)
+        a1 = a1.filter(Result.assessment_topic == 1)
     if("class" in topic):
-        a1 = a1.filter(Result.class_topic==1)
+        a1 = a1.filter(Result.class_topic == 1)
     if("lecture" in topic):
-        a1 = a1.filter(Result.lecture_topic==1)
+        a1 = a1.filter(Result.lecture_topic == 1)
     if("resource" in topic):
-        a1 = a1.filter(Result.resource_topic==1)
+        a1 = a1.filter(Result.resource_topic == 1)
     if("other" in topic):
-        a1 = a1.filter(Result.other_topic==1)
+        a1 = a1.filter(Result.other_topic == 1)
 
     a1 = a1.all()
     if is_empty(a1):
@@ -295,7 +367,8 @@ def getwordcloudcount():
     for a2 in a1:
         lists.append(a2.comment)
 
-    return ("There are {} comments satisfy the selection" ).format(str(len(lists))),200
+    return ("There are {} comments satisfy the selection").format(str(len(lists))), 200
+
 
 @app.route('/getavg', methods=['POST'])
 def getavg():
@@ -314,15 +387,15 @@ def getavg():
     a1 = a1.filter(Result.unit_number.in_(unitnumber))
 
     if("assessment" in topic):
-        a1 = a1.filter(Result.assessment_topic==1)
+        a1 = a1.filter(Result.assessment_topic == 1)
     if("class" in topic):
-        a1 = a1.filter(Result.class_topic==1)
+        a1 = a1.filter(Result.class_topic == 1)
     if("lecture" in topic):
-        a1 = a1.filter(Result.lecture_topic==1)
+        a1 = a1.filter(Result.lecture_topic == 1)
     if("resource" in topic):
-        a1 = a1.filter(Result.resource_topic==1)
+        a1 = a1.filter(Result.resource_topic == 1)
     if("other" in topic):
-        a1 = a1.filter(Result.other_topic==1)
+        a1 = a1.filter(Result.other_topic == 1)
 
     a1 = a1.all()
     if is_empty(a1):
@@ -334,16 +407,18 @@ def getavg():
 
     a5 = a3/a4
     print(a5)
-    return ("The average sastisfaction score is {0:.2f} " ).format(round(a5,2)),200
+    return ("The average sastisfaction score is {0:.2f} ").format(round(a5, 2)), 200
+
 
 @app.route("/statistics", methods=['GET'])
 def statistics():
     #lists = []
     #a1 = Result.query.with_entities(Result.unit_number).order_by(Result.unit_number).distinct()
     #for a2 in a1:
-    #    lists.append(a2.unit_number)
-    #return render_template('statistics.html', lists=lists)
+        #lists.append(a2.unit_number)
+        #return render_template('statistics.html', lists=lists)
     return render_template('uc.html')
+
 
 @app.route("/getimage", methods=['GET'])
 def getimage():
@@ -361,14 +436,17 @@ def getimage():
     response.mimetype = 'image/png'
     return response
 
+
 @app.route("/about", methods=['GET'])
 def about():
     return render_template('about.html')
+
 
 @app.errorhandler(404)
 def page_not_found(e):
     # note that we set the 404 status explicitly
     return render_template('404.html'), 404
+
 
 if __name__ == '__main__':
     app.run()

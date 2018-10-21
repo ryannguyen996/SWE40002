@@ -50,7 +50,7 @@
 
     <div class="container">
         <div class="row">
-            <input type="checkbox" data-ng-model="compare">Compare?
+            <input type="checkbox" data-ng-model="compare">Compare ?
         </div>
         <div class="row">
             <div class="col-xs-6">
@@ -69,8 +69,9 @@
                     </div>
 
                 </form>
-                <p>Wordcloud visulization</p>
-                <tang-cloud words="words" on-click="test(word)" width="350" height="400"></tang-cloud>
+                <p>Wordcloud visualization</p>
+                <word-cloud words="words" width="400" height="400" padding="3" rotate="360" use-transition="true" on-click="" ng-show="result">
+                </word-cloud>
             </div>
 
             <div class="col-xs-6" ng-show="compare">
@@ -89,8 +90,8 @@
                     </div>
 
                 </form>
-                <p>Wordcloud visulization</p>
-                <tang-cloud words="words1" on-click="test(word)" width="350" height="400"></tang-cloud>
+                <p>Wordcloud visualization</p>
+                <word-cloud words="words1" width="400" height="400" padding="3" rotate="360" use-transition="true" on-click="" ng-show="result1"></word-cloud>
             </div>
         </div>
     </div>
@@ -166,7 +167,9 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.2/angular.min.js"></script>
     <script src="{{ url_for('static', filename='js/vendor/angularjs-dropdown-multiselect.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/vendor/tangCloud.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/vendor/d3.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/vendor/d3.layout.cloud.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/vendor/angular-word-cloud.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/wordCloud.js') }}"></script>
 </body>
 

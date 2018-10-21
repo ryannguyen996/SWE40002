@@ -1,8 +1,9 @@
-var app = angular.module('myApp', ['tangcloud', 'angularjs-dropdown-multiselect']);
+var app = angular.module('myApp', ['angular-d3-word-cloud', 'angularjs-dropdown-multiselect']);
 app.controller('TestCtrl', ['$scope', '$http', '$timeout', '$element', '$compile', function ($scope, $http, $timeout, $element, $compile) {
     $scope.loading = false;
     $scope.submitButtonText = 'Submit';
     $scope.result = false;
+    $scope.result1 = false;
     console.log($scope.lists);
     $scope.unitnumberSelected = [];
     $scope.unitnumber = [];
@@ -62,6 +63,7 @@ app.controller('TestCtrl', ['$scope', '$http', '$timeout', '$element', '$compile
     });
 
     $scope.getResults = function () {
+        $scope.result = false;
         $scope.words = [];
         var userInput0 = [];
         var userInput1 = [];
@@ -110,6 +112,7 @@ app.controller('TestCtrl', ['$scope', '$http', '$timeout', '$element', '$compile
                 "topic": userInput1
             }).
             then(function (response) {
+                    console.log(response.data);
                     $scope.words = JSON.parse(response.data);
                     $scope.result = true;
                     $scope.loading = false;
@@ -124,6 +127,7 @@ app.controller('TestCtrl', ['$scope', '$http', '$timeout', '$element', '$compile
     };
 
     $scope.getResults1 = function () {
+        $scope.result1=false;
         $scope.words1 = [];
         var userInput0 = [];
         var userInput1 = [];
@@ -173,7 +177,7 @@ app.controller('TestCtrl', ['$scope', '$http', '$timeout', '$element', '$compile
             }).
             then(function (response) {
                     $scope.words1 = JSON.parse(response.data);
-                    $scope.result = true;
+                    $scope.result1 = true;
                     $scope.loading = false;
                     $scope.submitButtonText = 'Submit';
                 },
