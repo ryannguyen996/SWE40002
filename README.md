@@ -14,7 +14,7 @@ Students interested in this project are expected to have good analytical and pro
 ### First Steps
 
 ```sh
-$ pyvenv-3.6 env
+$ virtualenv env
 $ source env/bin/activate
 $ pip install -r requirements.txt
 ```
