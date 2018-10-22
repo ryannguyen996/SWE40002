@@ -12,7 +12,6 @@ import warnings
 from flask import Flask, render_template, request, jsonify, make_response
 from flask_sqlalchemy import SQLAlchemy
 from collections import Counter
-import random
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 from io import BytesIO
 import matplotlib.pyplot as plt
@@ -476,7 +475,7 @@ def getimage():
     df = pd.read_sql(a1.statement, a1.session.bind)
     graph = int(graph)
     if (graph == 1):
-        df_clean = df.drop(['id','student_id','unit_number','comment','satisfaction','sentiment'], axis=1)
+        df_clean = df.drop(columns=['id', 'student_id', 'unit_number', 'comment', 'satisfaction', 'sentiment'])
         counts = []
         categories = list(df_clean.columns.values)
         for i in categories:
@@ -494,13 +493,12 @@ def getimage():
         plt.ylabel('# of Comments', fontsize=12)
         plt.xlabel('category', fontsize=12)
 
-
     if (graph == 2):
-        df_clean = df.drop(['id','student_id','unit_number','comment','satisfaction','sentiment'], axis=1)
+        df_clean = df.drop(columns=['id', 'student_id', 'unit_number', 'comment', 'satisfaction', 'sentiment'])
         print(df_clean)
-        rowsums = df_clean.iloc[:,0:].sum(axis=1)
-        x=rowsums.value_counts()
-        plt.figure(figsize=(8,5))
+        rowsums = df_clean.iloc[:, 0:].sum(axis=1)
+        x = rowsums.value_counts()
+        plt.figure(figsize=(8, 5))
         sns.barplot(x.index, x.values)
         plt.title("Multiple categories per comment")
         plt.ylabel('# of Comments', fontsize=12)
@@ -510,7 +508,7 @@ def getimage():
         lens = df.comment.str.len()
         print(lens)
         lens = lens.hist(grid=False, bins=np.arange(0, 1500, 100))
-        lens.set_xlabel('Comments length')
+        lens.set_xlabel('Comments length (number of characters)')
         lens.set_ylabel('# of Comments')
         lens.set_title('Comment length distribution')
 
@@ -521,10 +519,17 @@ def getimage():
         print(df_clean.count())
         labels = 'Positive', 'Negative'
         pos = (count0/df_clean.count())*100
-        sizes = [pos,100-pos]
+        sizes = [pos, 100-pos]
         fig, ax1 = plt.subplots()
         ax1.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=90)
         ax1.axis('equal')
+
+    if (graph == 5):
+        df_clean = df['satisfaction']
+        lens = df_clean.hist(grid=False, bins=np.arange(0, 10, 1))
+        lens.set_xlabel('Score')
+        lens.set_ylabel('# of Comments')
+        lens.set_title('Satisfaction score distribution')
 
     fig = plt.gcf()
     fig.tight_layout()
@@ -537,6 +542,48 @@ def getimage():
     return response
 
 
+@app.route("/download", methods=['GET'])
+def download():
+    lists = []
+    a1 = Result.query.with_entities(Result.unit_number).order_by(Result.unit_number).distinct()
+    for a2 in a1:
+        lists.append(a2.unit_number)
+    return render_template('download.html', lists=lists)
+
+
+@app.route("/downloadcsv", methods=['POST'])
+def downloadcsv():
+    data = json.loads(request.data.decode())
+
+    try:
+        unitnumber = data["unitnumber"]
+    except:
+        return " ", 406
+
+    topic = data["topic"]
+    a1 = Result.query
+    a1 = a1.filter(Result.unit_number.in_(unitnumber))
+
+    if("assessment" in topic):
+        a1 = a1.filter(Result.assessment_topic == 1)
+    if("class" in topic):
+        a1 = a1.filter(Result.class_topic == 1)
+    if("lecture" in topic):
+        a1 = a1.filter(Result.lecture_topic == 1)
+    if("resource" in topic):
+        a1 = a1.filter(Result.resource_topic == 1)
+    if("other" in topic):
+        a1 = a1.filter(Result.other_topic == 1)
+
+    df = pd.read_sql(a1.statement, a1.session.bind)
+    resp = make_response(df.to_csv(index=False))
+    resp.headers["x-filename"] = "export.csv"
+    resp.headers["Content-Type"] = "text/csv"
+    return resp
+
+
+
+
 @app.route("/about", methods=['GET'])
 def about():
     return render_template('about.html')
@@ -544,7 +591,6 @@ def about():
 
 @app.errorhandler(404)
 def page_not_found(e):
-    # note that we set the 404 status explicitly
     return render_template('404.html'), 404
 
 

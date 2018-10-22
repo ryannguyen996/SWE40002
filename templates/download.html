@@ -2,9 +2,9 @@
 <html class="no-js" lang="en">
 
 <head>
-    <title>Wordcloud</title>
-    <meta charset="utf-8" />
+    <title>Statistics</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="utf-8" />
     <link rel="stylesheet" href="{{ url_for('static', filename='css/foundation.css') }}" />
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/slick.css') }}" />
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
@@ -35,9 +35,9 @@
                     <ul class="right">
                         <li><a href="/">Home</a></li>
                         <li><a href="/upload">Upload</a></li>
-                        <li class="active"><a href="/wordcloud">Wordcloud</a></li>
+                        <li><a href="/wordcloud">Wordcloud</a></li>
                         <li><a href="/statistics">Statistics</a></li>
-                        <li><a href="/download">Export</a></li>
+                        <li class="active"><a href="/download">Export</a></li>
                         <li><a href="/about">About Us</a></li>
                     </ul>
                 </section>
@@ -51,51 +51,24 @@
 
     <div class="container">
         <div class="row">
-            <input type="checkbox" data-ng-model="compare">Compare ?
+            <form role="form" data-ng-submit="getResults()">
+                <div class="form-group">
+                    <span>Select unit number</span>
+                    <div data-ng-dropdown-multiselect="" extra-settings="unitSetting" options="unitnumber" selected-model="unitnumberSelected" checkboxes="true"></div><br>
+                    <span>Select aspect</span>
+                    <div data-ng-dropdown-multiselect="" extra-settings="topicSetting" options="topic" selected-model="topicSelected" checkboxes="true"></div><span>* If not select, its will select all comments, regardless of topic</span><br>
+                    {% raw %}
+                    <button type="submit" class="btn btn-primary" data-ng-disabled="loading">{{ submitButtonText }}</button>
+                    <p ng-show="message">{{message}}</p>
+                    <p ng-show="count">{{count}}</p>
+                    {% endraw %}
+                </div>
+            </form>
         </div>
-        <div class="row">
-            <div class="col-xs-6">
-                <form role="form" data-ng-submit="getResults()">
-                    <div class="form-group">
-                        <span>Select unit number</span>
-                        <div data-ng-dropdown-multiselect="" extra-settings="unitSetting" options="unitnumber" selected-model="unitnumberSelected" checkboxes="true"></div><br>
-                        <span>Select aspect</span>
-                        <div data-ng-dropdown-multiselect="" extra-settings="topicSetting" options="topic" selected-model="topicSelected" checkboxes="true"></div><br>
-                        {% raw %}
-                        <button type="submit" class="btn btn-primary" data-ng-disabled="loading">{{ submitButtonText }}</button>
-                        <p ng-show="message">{{message}}</p>
-                        <p ng-show="count">{{count}}</p>
-                        <p ng-show="avg">{{avg}}</p>
-                        {% endraw %}
-                    </div>
+        <br />
 
-                </form>
-                <p>Wordcloud visualization</p>
-                <word-cloud words="words" width="400" height="400" padding="5" rotate="360" use-transition="true" on-click="" ng-show="result">
-                </word-cloud>
-            </div>
-
-            <div class="col-xs-6" ng-show="compare">
-                <form role="form" ng-submit="getResults1()">
-                    <div class="form-group">
-                        <span>Select unit number</span>
-                        <div data-ng-dropdown-multiselect="" extra-settings="unitSetting" options="unitnumber1" selected-model="unitnumber1Selected" checkboxes="true"></div><br>
-                        <span>Select aspect</span>
-                        <div data-ng-dropdown-multiselect="" extra-settings="topicSetting" options="topic1" selected-model="topic1Selected" checkboxes="true"></div><br>
-                        {% raw %}
-                        <button type="submit" class="btn btn-primary" data-ng-disabled="loading">{{ submitButtonText }}</button>
-                        <p ng-show="message1">{{message1}}</p>
-                        <p ng-show="count1">{{count1}}</p>
-                        <p ng-show="avg1">{{avg1}}</p>
-                        {% endraw %}
-                    </div>
-
-                </form>
-                <p>Wordcloud visualization</p>
-                <word-cloud words="words1" width="400" height="400" padding="5" rotate="360" use-transition="true" on-click="" ng-show="result1"></word-cloud>
-            </div>
-        </div>
     </div>
+    <br /><br />
 
     <div class="footer-sec" style="padding-left: 25px;">
         <div class="row">
@@ -169,10 +142,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.2/angular.min.js"></script>
     <script src="{{ url_for('static', filename='js/vendor/angularjs-dropdown-multiselect.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/vendor/d3.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/vendor/d3.layout.cloud.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/vendor/angular-word-cloud.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/wordCloud.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/download.js') }}"></script>
 </body>
 
 </html>
