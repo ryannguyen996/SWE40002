@@ -79,7 +79,7 @@ app.controller('TestCtrl', ['$scope', '$http', '$timeout', '$element', '$compile
         $scope.message = "";
         $scope.loading = true;
         $scope.submitButtonText = 'Loading...';
-        if (userInput0.length === 0 || userInput1.length === 0) {
+        if (userInput0.length === 0) {
             $scope.message = "Invalid input";
             $scope.loading = false;
             $scope.submitButtonText = 'Submit';
@@ -143,7 +143,7 @@ app.controller('TestCtrl', ['$scope', '$http', '$timeout', '$element', '$compile
         $scope.message1 = "";
         $scope.loading = true;
         $scope.submitButtonText = 'Loading...';
-        if (userInput1.length === 0 || userInput0 === 0) {
+        if (userInput0 === 0) {
             $scope.message1 = "Invalid input";
             $scope.loading = false;
             $scope.submitButtonText = 'Submit';

@@ -265,11 +265,10 @@ def getwordcloud():
 
     try:
         unitnumber = data["unitnumber"]
-        topic = data["topic"]
-        print(topic)
     except:
         return "Error retriveing unit number and topic", 406
 
+    topic = data["topic"]
     lists = []
 
     a1 = Result.query
@@ -320,6 +319,8 @@ def getwordcloud():
             elif("other" in topic):
                 if(other0.predict(a4).item(0) == 1):
                     temp1 += a3
+            else:
+                temp1 += a3
         a2.comment = temp1
 
     for a2 in a1:
@@ -368,10 +369,10 @@ def getwordcloudcount():
 
     try:
         unitnumber = data["unitnumber"]
-        topic = data["topic"]
     except:
         return " ", 406
 
+    topic = data["topic"]
     lists = []
 
     a1 = Result.query
@@ -405,9 +406,9 @@ def getavg():
 
     try:
         unitnumber = data["unitnumber"]
-        topic = data["topic"]
     except:
         return " ", 406
+    topic = data["topic"]
 
     a3 = 0
     a4 = 0
