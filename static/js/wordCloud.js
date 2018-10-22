@@ -33,9 +33,10 @@ app.controller('TestCtrl', ['$scope', '$http', '$timeout', '$element', '$compile
         scrollable: true,
         scrollableHeight: '250px',
         enableSearch: true,
-        smartButtonMaxItems: 4
+        smartButtonMaxItems: 3
     };
     $scope.topicSetting = {
+        smartButtonMaxItems: 3
     };
 
 //        angular.forEach($scope.lists, function (value, index) {
@@ -189,8 +190,5 @@ app.controller('TestCtrl', ['$scope', '$http', '$timeout', '$element', '$compile
         }
     };
 
-    $scope.test = function (word) {
-        alert("clicked on " + word);
-    };
 
     }]);

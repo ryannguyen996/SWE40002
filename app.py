@@ -5,7 +5,7 @@ import nltk
 from nltk.stem import WordNetLemmatizer
 from nltk.corpus import stopwords
 from sklearn.externals import joblib
-import numpy
+import numpy as np
 import string
 import re
 import warnings
@@ -14,8 +14,10 @@ from flask_sqlalchemy import SQLAlchemy
 from collections import Counter
 import random
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
-from matplotlib.figure import Figure
 from io import BytesIO
+import matplotlib.pyplot as plt
+import pandas as pd
+import seaborn as sns
 
 
 csvformat = ['Student ID\tUnit Number\tComments\tSatisfaction']
@@ -149,31 +151,58 @@ def scale(unscaledNum, minAllowed, maxAllowed, minCount, maxCount):
     return int(round((maxAllowed - minAllowed) * (unscaledNum - minCount) / (maxCount - minCount) + minAllowed))
 
 
+#def color(number):
+#    if(number == 0.0):
+#        return "#ff0040"
+#    if(number == 0.1):
+#        return "#ff0000"
+#    if(number == 0.2):
+#        return "#ff4000"
+#    if(number == 0.3):
+#        return "#ff8000"
+#    if(number == 0.4):
+#        return "#ffbf00"
+#    if(number == 0.5):
+#        return "#ffff00"
+#    if(number == 0.6):
+#        return "#bfff00"
+#    if(number == 0.7):
+#        return "#80ff00"
+#    if(number == 0.8):
+#        return "#40ff00"
+#    if(number == 0.9):
+#        return "#00ff00"
+#    if(number == 1.0):
+#        return "#00ff40"
+#    if(number > 1.0):
+#        return "#ffff00"
+
+# add 3 shade
 def color(number):
     if(number == 0.0):
-        return "#ff0040"
+        return "#c40031"
     if(number == 0.1):
-        return "#ff0000"
+        return "#c40000"
     if(number == 0.2):
-        return "#ff4000"
+        return "#c43100"
     if(number == 0.3):
-        return "#ff8000"
+        return "#c46200"
     if(number == 0.4):
-        return "#ffbf00"
+        return "#c49300"
     if(number == 0.5):
-        return "#ffff00"
+        return "#c4c400"
     if(number == 0.6):
-        return "#bfff00"
+        return "#93c400"
     if(number == 0.7):
-        return "#80ff00"
+        return "#62c400"
     if(number == 0.8):
-        return "#40ff00"
+        return "#31c400"
     if(number == 0.9):
-        return "#00ff00"
+        return "#00c400"
     if(number == 1.0):
-        return "#00ff40"
+        return "#00c431"
     if(number > 1.0):
-        return "#00ff00"
+        return "#c4c400"
 
 
 def is_empty(any_structure):
@@ -412,28 +441,99 @@ def getavg():
 
 @app.route("/statistics", methods=['GET'])
 def statistics():
-    #lists = []
-    #a1 = Result.query.with_entities(Result.unit_number).order_by(Result.unit_number).distinct()
-    #for a2 in a1:
-        #lists.append(a2.unit_number)
-        #return render_template('statistics.html', lists=lists)
-    return render_template('uc.html')
+    lists = []
+    a1 = Result.query.with_entities(Result.unit_number).order_by(Result.unit_number).distinct()
+    for a2 in a1:
+        lists.append(a2.unit_number)
+    return render_template('statistics.html', lists=lists)
 
 
-@app.route("/getimage", methods=['GET'])
+@app.route("/getimage", methods=['POST'])
 def getimage():
-    fig = Figure()
-    axis = fig.add_subplot(1, 1, 1)
+    data = json.loads(request.data.decode())
 
-    xs = range(100)
-    ys = [random.randint(1, 50) for x in xs]
+    try:
+        unitnumber = data["unitnumber"]
+        graph = data["graph"]
+    except:
+        return " ", 406
 
-    axis.plot(xs, ys)
+    topic = data["topic"]
+    a1 = Result.query
+    a1 = a1.filter(Result.unit_number.in_(unitnumber))
+
+    if("assessment" in topic):
+        a1 = a1.filter(Result.assessment_topic == 1)
+    if("class" in topic):
+        a1 = a1.filter(Result.class_topic == 1)
+    if("lecture" in topic):
+        a1 = a1.filter(Result.lecture_topic == 1)
+    if("resource" in topic):
+        a1 = a1.filter(Result.resource_topic == 1)
+    if("other" in topic):
+        a1 = a1.filter(Result.other_topic == 1)
+
+    df = pd.read_sql(a1.statement, a1.session.bind)
+    graph = int(graph)
+    if (graph == 1):
+        df_clean = df.drop(['id','student_id','unit_number','comment','satisfaction','sentiment'], axis=1)
+        counts = []
+        categories = list(df_clean.columns.values)
+        for i in categories:
+            counts.append((i, df_clean[i].sum()))
+        df_stats = pd.DataFrame(counts, columns=['category', 'number_of_comments'])
+        df_stats['category'][0] = 'Assessment'
+        df_stats['category'][1] = 'Class'
+        df_stats['category'][2] = 'Lecture'
+        df_stats['category'][3] = 'Resource'
+        df_stats['category'][4] = 'Other'
+        print(df_stats)
+
+        df_stats.plot(x='category', y='number_of_comments', kind='bar', legend=False, grid=False, figsize=(8, 5))
+        plt.title("Number of comments per category")
+        plt.ylabel('# of Comments', fontsize=12)
+        plt.xlabel('category', fontsize=12)
+
+
+    if (graph == 2):
+        df_clean = df.drop(['id','student_id','unit_number','comment','satisfaction','sentiment'], axis=1)
+        print(df_clean)
+        rowsums = df_clean.iloc[:,0:].sum(axis=1)
+        x=rowsums.value_counts()
+        plt.figure(figsize=(8,5))
+        sns.barplot(x.index, x.values)
+        plt.title("Multiple categories per comment")
+        plt.ylabel('# of Comments', fontsize=12)
+        plt.xlabel('# of Categories', fontsize=12)
+
+    if (graph == 3):
+        lens = df.comment.str.len()
+        print(lens)
+        lens = lens.hist(grid=False, bins=np.arange(0, 1500, 100))
+        lens.set_xlabel('Comments length')
+        lens.set_ylabel('# of Comments')
+        lens.set_title('Comment length distribution')
+
+    if (graph == 4):
+        df_clean = df['sentiment']
+        count0 = df_clean.sum()
+        print(count0)
+        print(df_clean.count())
+        labels = 'Positive', 'Negative'
+        pos = (count0/df_clean.count())*100
+        sizes = [pos,100-pos]
+        fig, ax1 = plt.subplots()
+        ax1.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=90)
+        ax1.axis('equal')
+
+    fig = plt.gcf()
+    fig.tight_layout()
     canvas = FigureCanvas(fig)
-    output = BytesIO()
-    canvas.print_png(output)
-    response = make_response(output.getvalue())
+    img = BytesIO()
+    canvas.print_png(img)
+    response = make_response(img.getvalue())
     response.mimetype = 'image/png'
+    plt.close(fig)
     return response
 
 

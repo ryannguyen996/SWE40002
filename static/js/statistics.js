@@ -40,9 +40,11 @@ app.controller('TestCtrl', ['$scope', '$http', function ($scope, $http) {
         scrollable: true,
         scrollableHeight: '250px',
         enableSearch: true,
-        smartButtonMaxItems: 4
+        smartButtonMaxItems: 3
     };
-    $scope.topicSetting = {};
+    $scope.topicSetting = {
+        smartButtonMaxItems: 3
+    };
 
     $scope.$watch('lists', function (value) {
         angular.forEach($scope.lists, function (value, index) {
@@ -65,8 +67,20 @@ app.controller('TestCtrl', ['$scope', '$http', function ($scope, $http) {
         $scope.message = "";
         $scope.loading = true;
         $scope.submitButtonText = 'Loading...';
-
-            $http.get('/getimage', {responseType: "arraybuffer"}).
+        console.log($scope.selection)
+        if (userInput0.length === 0 || $scope.selection.length === 0 || $scope.selection.length === undefined) {
+            $scope.message = "Invalid input";
+            $scope.loading = false;
+            $scope.submitButtonText = 'Submit';
+        } else {
+            $scope.img1 ="";
+            $http.post('/getimage', {
+                "unitnumber": userInput0,
+                "topic": userInput1,
+                "graph": $scope.selection,
+            }, {
+                responseType: "arraybuffer"
+            }).
             then(function (response) {
                     console.log(response);
                     var str = _arrayBufferToBase64(response.data);
@@ -81,7 +95,7 @@ app.controller('TestCtrl', ['$scope', '$http', function ($scope, $http) {
                     $scope.loading = false;
                     $scope.submitButtonText = 'Submit';
                 });
-
+        }
     };
 
 }]);

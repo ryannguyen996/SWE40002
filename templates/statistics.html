@@ -50,44 +50,32 @@
 
     <div class="container">
         <div class="row">
-            <form role="form" data-ng-submit="">
+            <form role="form" data-ng-submit="getResults()">
                 <div class="form-group">
-                    <p>Select graph you want to display</p>
+                    <span>Select graph you want to display</span>
                     <select ng-model="selection" style="height: auto;width: auto;">
                         <option value="">Please select</option>
                         <option value="1">Multiple categories per comment</option>
                         <option value="2">Number of comment per category</option>
                         <option value="3">Comment length distribution</option>
-                    </select>
+                        <option value="4">Positive/Negative dustribution</option>
+                    </select><br>
+                    <span>Select unit number</span>
+                    <div data-ng-dropdown-multiselect="" extra-settings="unitSetting" options="unitnumber" selected-model="unitnumberSelected" checkboxes="true"></div><br>
+                    <span>Select aspect</span>
+                    <div data-ng-dropdown-multiselect="" extra-settings="topicSetting" options="topic" selected-model="topicSelected" checkboxes="true"></div><span>* If not select, its will select all comments, regardless of topic</span><br>
+                    {% raw %}
+                    <button type="submit" class="btn btn-primary" data-ng-disabled="loading">{{ submitButtonText }}</button>
+                    <p ng-show="message">{{message}}</p>
+                    <p ng-show="count">{{count}}</p>
+                    {% endraw %}
                 </div>
             </form>
-             <form role="form" data-ng-submit="getResults()">
-                    <div class="form-group">
-                        <span>Select unit number</span>
-                        <div data-ng-dropdown-multiselect="" extra-settings="unitSetting" options="unitnumber" selected-model="unitnumberSelected" checkboxes="true"></div><br>
-                        <span>Select aspect</span>
-                        <div data-ng-dropdown-multiselect="" extra-settings="topicSetting" options="topic" selected-model="topicSelected" checkboxes="true"></div><br>
-                        {% raw %}
-                        <button type="submit" class="btn btn-primary" data-ng-disabled="loading">{{ submitButtonText }}</button>
-                        <p ng-show="message">{{message}}</p>
-                        <p ng-show="count">{{count}}</p>
-                        {% endraw %}
-                    </div>
-                </form>
         </div>
         <br />
         {% raw %}
         <img data-ng-src="data:image/png;base64,{{img1}}">
         {% endraw %}
-        <div class="row" ng-show="selection==1">
-            <img src="{{ url_for('static', filename='img/Noname3.jpg') }}">
-        </div>
-        <div class="row" ng-show="selection==2">
-            <img src="{{ url_for('static', filename='img/Noname4.jpg') }}">
-        </div>
-        <div class="row" ng-show="selection==3">
-            <img src="{{ url_for('static', filename='img/Noname5.jpg') }}">
-        </div>
     </div>
     <br /><br />
 
