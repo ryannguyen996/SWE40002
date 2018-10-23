@@ -56,16 +56,16 @@
                     <span>Select graph you want to display</span>
                     <select ng-model="selection" style="height: auto;width: auto;">
                         <option value="">Please select</option>
-                        <option value="1">Multiple categories per comment</option>
-                        <option value="2">Number of comment per category</option>
+                        <option value="1">Number of comment per category</option>
+                        <option value="2">Multiple categories per comment</option>
                         <option value="3">Comment length distribution</option>
-                        <option value="4">Positive/Negative dustribution</option>
-                        <option value="5">Satisfaction score dustribution</option>
+                        <option value="4">Sentiment distribution</option>
+                        <option value="5">Satisfaction score distribution</option>
                     </select><br>
                     <span>Select unit number</span>
                     <div data-ng-dropdown-multiselect="" extra-settings="unitSetting" options="unitnumber" selected-model="unitnumberSelected" checkboxes="true"></div><br>
                     <span>Select aspect</span>
-                    <div data-ng-dropdown-multiselect="" extra-settings="topicSetting" options="topic" selected-model="topicSelected" checkboxes="true"></div><span>* If not select, its will select all comments, regardless of topic</span><br>
+                    <div data-ng-dropdown-multiselect="" extra-settings="topicSetting" options="topic" selected-model="topicSelected" checkboxes="true"></div><span>* If not selected, all the comments will be considered.</span><br>
                     {% raw %}
                     <button type="submit" class="btn btn-primary" data-ng-disabled="loading">{{ submitButtonText }}</button>
                     <p ng-show="message">{{message}}</p>
