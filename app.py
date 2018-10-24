@@ -587,11 +587,14 @@ def downloadcsv():
     return resp
 
 
-
-
 @app.route("/about", methods=['GET'])
 def about():
     return render_template('about.html')
+
+
+@app.route("/help", methods=['GET'])
+def help1():
+    return render_template('help.html')
 
 
 @app.errorhandler(404)

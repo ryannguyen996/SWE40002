@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<!-- saved from url=(0056)file:///C:/Users/TriHuynh/Downloads/Documents/About.html -->
+<html class="no-js" lang="en">
+
+<head>
+    <title>Help</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/foundation.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/slick.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/responsive.css') }}" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/wordcloud.css') }}">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon" />
+    <script src="{{ url_for('static', filename='js/vendor/modernizr.js') }}"></script>
+</head>
+
+<body data-ng-app="myApp" data-ng-controller="TestCtrl">
+
+    <div class="row">
+        <div class="large-4 medium-4 small-12 columns">
+            <div id="logo"><a href="index.html"><img style="padding-left: 20px;" src="{{ url_for('static', filename='img/main2.png') }}" alt="Conmpany Name"></a></div>
+        </div>
+        <div class="large-8 medium-8 small-12 columns">
+            <nav class="top-bar" data-topbar role="navigation">
+                <ul class="title-area">
+                    <li class="name"> </li>
+                    <!-- Remove the class "menu-icon" to get rid of menu icon. Take out "Menu" to just have icon alone -->
+                    <li class="toggle-topbar menu-icon"><a href="#"><span>Menu</span></a></li>
+                </ul>
+
+                <section class="top-bar-section navbar-right">
+                    <!-- Right Nav Section -->
+                    <ul class="right">
+                        <li><a href="/">Home</a></li>
+                        <li><a href="/upload">Upload</a></li>
+                        <li><a href="/wordcloud">Wordcloud</a></li>
+                        <li><a href="/statistics">Statistics</a></li>
+                        <li><a href="/download">Export</a></li>
+                        <li><a href="/about">About Us</a></li>
+                    </ul>
+                </section>
+            </nav>
+        </div>
+    </div>
+    <div class="inner-banner">
+        <img src="{{ url_for('static', filename='img/about-banner.jpg') }}" alt="About Us">
+    </div>
+    <br />
+
+    <div class="container">
+        <h2>Guidelines</h2>
+        <div class="content-sec inner-sec">
+            <div class="row">
+                <div>
+                    <p>The rows format <b>Student ID</b>, <b>Unit Number</b>,<b>Comments</b>, <b>Satisfaction</b> respectively with case sensitive</p>
+                    <p>File upload must be encoded in UTF-8 BOM. Tab delimited TSV.</p>
+                    <p><b>Here is a sample of file format:</b></p>
+                    <img src="{{ url_for('static', filename='img/help/pic2.png') }}" alt="pic" border="1">
+                    <br /><br />
+                    <img src="{{ url_for('static', filename='img/help/pic1.png') }}" alt="pic" border="1">
+                    <br /><br /><br />
+                    <p><b>Upload file process:</b></p>
+                    <p>This page for upload processing file.</p>
+                    <img src="{{ url_for('static', filename='img/help/upload1.png') }}" alt="pic" border="1">
+                    <br /><br />
+                    <img src="{{ url_for('static', filename='img/help/upload2.png') }}" alt="pic" border="1">
+                    <br /><br /><br />
+                    <p><b>Then go to Wordcloud page:</b></p>
+                    <p>Wordcloud page for generate wordcloud after upload data file.</p>
+                    <img src="{{ url_for('static', filename='img/help/wordcloud.png') }}" alt="pic" border="1">
+                    <br /><br />
+                    <p>Select Units and Aspects.</p>
+                    <img src="{{ url_for('static', filename='img/help/wordcloud1.png') }}" alt="pic" border="1">
+                    <br /><br />
+                    <p>Then click submit for machine generate the wordcloud.</p>
+                    <img src="{{ url_for('static', filename='img/help/wordcloud2.png') }}" alt="pic" border="1">
+                    <br /><br />
+                    <p>For compare the wordcloud, click on Compare on top left cornor.</p>
+                    <img src="{{ url_for('static', filename='img/help/wordcloud3.png') }}" alt="pic" border="1">
+                    <br /><br /><br />
+                    <p><b>After that go to Statistic page:</b></p>
+                    <img src="{{ url_for('static', filename='img/help/sta1.png') }}" alt="pic" border="1">
+                    <br /><br />
+                    <p>Select type of graph, units and aspects, then click submit.</p>
+                    <img src="{{ url_for('static', filename='img/help/sta2.png') }}" alt="pic" border="1">
+                    <br /><br /><br />
+                    <p><b>Finally that go to Export page:</b></p>
+                    <p>Select Units and Aspects, then click download.</p>
+                    <img src="{{ url_for('static', filename='img/help/export.png') }}" alt="pic" border="1">
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer-sec" style="padding-left: 25px;">
+        <div class="row">
+            <div class="large-3 medium-3 small-12 columns">
+                <div class="foot-1">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="/" title="Home">Home</a></li>
+                        <li><a href="/about" title="About Us">About Us</a></li>
+                        <li><a href="/upload" title="Upload">Upload</a></li>
+                        <li><a href="/wordcloud" title="Wordcloud">Wordcloud</a></li>
+                        <li><a href="/statistics" title="Statistic">Statistic</a></li>
+                        <li><a href="/download" title="Download">Export</a></li>
+                        <li><a href="/help" title="Help">Help</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="large-3 medium-3 small-12 columns">
+                <div class="foot-1">
+                    <h4>Services</h4>
+                    <ul>
+                        <li><a href="services.html" title="Services">Our application info</a></li>
+                        <li><a href="services.html" title="Services">Our team</a></li>
+                        <li><a href="services.html" title="Services">Upload data for processing</a></li>
+                        <li><a href="services.html" title="Services">Generate wordcloud</a></li>
+                        <li><a href="services.html" title="Services">Statistic data</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="large-4 medium-3 small-12 columns">
+                <div class="foot-1">
+                    <h4>Contact Us</h4>
+                    <ul>
+                        <li><a href="mailto:info@companyname.com" target="_blank">group25@gmail.com</a></li>
+                        <li><a href="tel:(01) 800 854 633" target="_blank">0402778778</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="large-2 medium-3 small-12 columns">
+                <div class="foot-1">
+                    <h4>Follow Us</h4>
+                    <div class="social" style="background: url({{ url_for('static', filename='img/social.png') }}) no-repeat">
+                        <div class="facebook"><a href="#" class="facebook"></a></div>
+                        <div class="twitter"><a href="#" class="twitter"></a></div>
+                        <div class="gplus"><a href="#" class="gplus"></a></div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="copy">
+        <div class="row">
+            <div class="large-12 columns">
+                Copyright &copy; 2016 SleekBiz. All Rights Reserved. Free <a href="http://www.pfind.com/goodies/sleekbiz/">SleekBiz</a> Template by <a href="http://www.pfind.com/goodies/">pFind Goodies</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="{{ url_for('static', filename='js/foundation.min.js') }}"></script>
+    <script>
+        $(document).foundation();
+
+    </script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/all.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.2/angular.min.js"></script>
+
+
+</body>
+
+</html>
