@@ -48,22 +48,29 @@
         <img src="{{ url_for('static', filename='img/about-banner.jpg') }}" alt="About Us">
     </div>
     <br />
-
-    <h2>Upload TSV file for processing</h2>
-    <p>The rows format is: Student ID, Unit Number,Comments, Satisfaction</p>
-    <p>File upload must be encoded in UTF-8 BOM. Tab delimited TSV.</p>
     <div class="container">
-        <div class="row">
-            <input type="file" data-file-change="upload">
-            <img src="{{ url_for('static', filename='img/spinner.gif') }}" style="width:32px;height:32px;" data-ng-show="loading">
-        </div>
-        <div class="row">
-            {% raw %}
-            <span>{{message}}</span>
-            <span ng-show="message">Please wait 2 minutes for processing comments</span>
-            {% endraw %}
+        <div class="content-sec">
+            <div class="row">
+                <div class="large-12 columns text-center">
+                    <h2>Upload TSV file for processing</h2>
+                    <p>The rows format is: Student ID, Unit Number,Comments, Satisfaction<br>
+                        File upload must be encoded in UTF-8 BOM. Tab delimited TSV.</p>
+
+                </div>
+            </div>
+            <div class="row">
+                <input type="file" data-file-change="upload">
+                <img src="{{ url_for('static', filename='img/spinner.gif') }}" style="width:32px;height:32px;" data-ng-show="loading">
+            </div>
+            <div class="row">
+                {% raw %}
+                <span>{{message}}</span>
+                <span ng-show="message">Please wait 2 minutes for processing comments</span>
+                {% endraw %}
+            </div>
         </div>
     </div>
+
 
     <div class="footer-sec" style="padding-left: 25px;">
         <div class="row">
