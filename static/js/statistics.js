@@ -22,8 +22,8 @@ app.controller('TestCtrl', ['$scope', '$http', function ($scope, $http) {
         id: "class",
         label: "class"
     }, {
-        id: "lecture",
-        label: "lecture"
+        id: "teacher",
+        label: "teacher"
     }, {
         id: "resource",
         label: "resource"

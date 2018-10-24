@@ -107,7 +107,7 @@ def clean_text(text):
 def classifier(destination):
     with warnings.catch_warnings():
         warnings.simplefilter("ignore", category=UserWarning)
-        lecture0 = joblib.load('classifiers/Lecture.pkl')
+        teacher0 = joblib.load('classifiers/Teacher.pkl')
         class0 = joblib.load('classifiers/Class.pkl')
         assessment0 = joblib.load('classifiers/Assessment.pkl')
         resource0 = joblib.load('classifiers/Resource.pkl')
@@ -133,7 +133,7 @@ def classifier(destination):
                         satisfaction=int(row[3]),
                         assessment_topic=int(assessment0.predict(comments).item(0)),
                         class_topic=int(class0.predict(comments).item(0)),
-                        lecture_topic=int(lecture0.predict(comments).item(0)),
+                        teacher_topic=int(teacher0.predict(comments).item(0)),
                         other_topic=int(other0.predict(comments).item(0)),
                         resource_topic=int(resource0.predict(comments).item(0)),
                         sentiment=int(sentiment0.predict(comments).item(0))
@@ -278,8 +278,8 @@ def getwordcloud():
         a1 = a1.filter(Result.assessment_topic == 1)
     if("class" in topic):
         a1 = a1.filter(Result.class_topic == 1)
-    if("lecture" in topic):
-        a1 = a1.filter(Result.lecture_topic == 1)
+    if("teacher" in topic):
+        a1 = a1.filter(Result.teacher_topic == 1)
     if("resource" in topic):
         a1 = a1.filter(Result.resource_topic == 1)
     if("other" in topic):
@@ -292,7 +292,7 @@ def getwordcloud():
 
     with warnings.catch_warnings():
         warnings.simplefilter("ignore", category=UserWarning)
-        lecture0 = joblib.load('classifiers/Lecture.pkl')
+        teacher0 = joblib.load('classifiers/Teacher.pkl')
         class0 = joblib.load('classifiers/Class.pkl')
         assessment0 = joblib.load('classifiers/Assessment.pkl')
         resource0 = joblib.load('classifiers/Resource.pkl')
@@ -310,8 +310,8 @@ def getwordcloud():
             elif("class" in topic):
                 if(class0.predict(a4).item(0) == 1):
                     temp1 += a3
-            elif("lecture" in topic):
-                if(lecture0.predict(a4).item(0) == 1):
+            elif("teacher" in topic):
+                if(teacher0.predict(a4).item(0) == 1):
                     temp1 += a3
             elif("resource" in topic):
                 if(resource0.predict(a4).item(0) == 1):
@@ -382,8 +382,8 @@ def getwordcloudcount():
         a1 = a1.filter(Result.assessment_topic == 1)
     if("class" in topic):
         a1 = a1.filter(Result.class_topic == 1)
-    if("lecture" in topic):
-        a1 = a1.filter(Result.lecture_topic == 1)
+    if("teacher" in topic):
+        a1 = a1.filter(Result.teacher_topic == 1)
     if("resource" in topic):
         a1 = a1.filter(Result.resource_topic == 1)
     if("other" in topic):
@@ -419,8 +419,8 @@ def getavg():
         a1 = a1.filter(Result.assessment_topic == 1)
     if("class" in topic):
         a1 = a1.filter(Result.class_topic == 1)
-    if("lecture" in topic):
-        a1 = a1.filter(Result.lecture_topic == 1)
+    if("teacher" in topic):
+        a1 = a1.filter(Result.teacher_topic == 1)
     if("resource" in topic):
         a1 = a1.filter(Result.resource_topic == 1)
     if("other" in topic):
@@ -466,8 +466,8 @@ def getimage():
         a1 = a1.filter(Result.assessment_topic == 1)
     if("class" in topic):
         a1 = a1.filter(Result.class_topic == 1)
-    if("lecture" in topic):
-        a1 = a1.filter(Result.lecture_topic == 1)
+    if("teacher" in topic):
+        a1 = a1.filter(Result.teacher_topic == 1)
     if("resource" in topic):
         a1 = a1.filter(Result.resource_topic == 1)
     if("other" in topic):
@@ -482,9 +482,10 @@ def getimage():
         for i in categories:
             counts.append((i, df_clean[i].sum()))
         df_stats = pd.DataFrame(counts, columns=['category', 'number_of_comments'])
+        print(df_stats)
         df_stats['category'][0] = 'Assessment'
         df_stats['category'][1] = 'Class'
-        df_stats['category'][2] = 'Lecture'
+        df_stats['category'][2] = 'Teacher'
         df_stats['category'][3] = 'Resource'
         df_stats['category'][4] = 'Other'
         print(df_stats)
@@ -570,16 +571,17 @@ def downloadcsv():
         a1 = a1.filter(Result.assessment_topic == 1)
     if("class" in topic):
         a1 = a1.filter(Result.class_topic == 1)
-    if("lecture" in topic):
-        a1 = a1.filter(Result.lecture_topic == 1)
+    if("teacher" in topic):
+        a1 = a1.filter(Result.teacher_topic == 1)
     if("resource" in topic):
         a1 = a1.filter(Result.resource_topic == 1)
     if("other" in topic):
         a1 = a1.filter(Result.other_topic == 1)
 
     df = pd.read_sql(a1.statement, a1.session.bind)
-    resp = make_response(df.to_csv(index=False))
-    resp.headers["x-filename"] = "export.csv"
+    df.drop(['id'], axis=1)
+    resp = make_response(df.to_csv(index=False, sep='\t'))
+    resp.headers["x-filename"] = "export.tsv"
     resp.headers["Content-Type"] = "text/csv"
     return resp
 

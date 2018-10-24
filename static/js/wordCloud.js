@@ -15,8 +15,8 @@ app.controller('TestCtrl', ['$scope', '$http', '$timeout', '$element', '$compile
         id: "class",
         label: "class"
     }, {
-        id: "lecture",
-        label: "lecture"
+        id: "teacher",
+        label: "teacher"
     }, {
         id: "resource",
         label: "resource"

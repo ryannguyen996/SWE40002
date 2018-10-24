@@ -1,6 +1,6 @@
 var app = angular.module('myApp', ['angularjs-dropdown-multiselect', ]);
 app.controller('TestCtrl', ['$scope', '$http', function ($scope, $http) {
-    $scope.submitButtonText = 'Download';
+    $scope.submitButtonText = 'Download .tsv';
     $scope.loading = false;
     $scope.result = false;
     $scope.unitnumberSelected = [];
@@ -13,8 +13,8 @@ app.controller('TestCtrl', ['$scope', '$http', function ($scope, $http) {
         id: "class",
         label: "class"
     }, {
-        id: "lecture",
-        label: "lecture"
+        id: "teacher",
+        label: "teacher"
     }, {
         id: "resource",
         label: "resource"
@@ -62,7 +62,7 @@ app.controller('TestCtrl', ['$scope', '$http', function ($scope, $http) {
         if (userInput0.length === 0) {
             $scope.message = "Invalid input";
             $scope.loading = false;
-            $scope.submitButtonText = 'Download';
+            $scope.submitButtonText = 'Download .tsv';
         } else {
             //$scope.img1 = "";
             //            $http.post('/downloadcsv', {
@@ -78,12 +78,12 @@ app.controller('TestCtrl', ['$scope', '$http', function ($scope, $http) {
             //                    $scope.img1 = str;
             //                    $scope.result = true;
             //                    $scope.loading = false;
-            //                    $scope.submitButtonText = 'Download';
+            //                    $scope.submitButtonText = 'Download .tsv';
             //                },
             //                function (response) {
             //                    $scope.message = response.data;
             //                    $scope.loading = false;
-            //                    $scope.submitButtonText = 'Download';
+            //                    $scope.submitButtonText = 'Download .tsv';
             //                });
             $http.post('/downloadcsv', {
                 "unitnumber": userInput0,
@@ -113,7 +113,7 @@ app.controller('TestCtrl', ['$scope', '$http', function ($scope, $http) {
                         });
                         linkElement.dispatchEvent(clickEvent);
                         $scope.loading = false;
-                        $scope.submitButtonText = 'Download';
+                        $scope.submitButtonText = 'Download .tsv';
                     } catch (ex) {
                         console.log(ex);
                     }
@@ -121,7 +121,7 @@ app.controller('TestCtrl', ['$scope', '$http', function ($scope, $http) {
                 function (response) {
                     $scope.message = response.data;
                     $scope.loading = false;
-                    $scope.submitButtonText = 'Download';
+                    $scope.submitButtonText = 'Download .tsv';
                 });
 
         }
