@@ -17,7 +17,9 @@ from io import BytesIO
 import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sns
-
+from rq import Queue
+from rq.job import Job
+from worker import conn
 
 csvformat = ['Student ID\tUnit Number\tComments\tSatisfaction']
 APP_ROOT = os.path.dirname(os.path.abspath(__file__))
@@ -26,7 +28,7 @@ app.config.from_object(os.environ['APP_SETTINGS'])
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 nltk.data.path.append('./nltk_data/')
-
+q = Queue(connection=conn)
 from models import Result
 
 
@@ -45,7 +47,7 @@ def assert_csvformat(destination):
         print(i)
         print(i == csvformat)
         if (i == csvformat):
-            classifier(destination)
+            job = q.enqueue_call(func=classifier, args=(destination,), result_ttl='5m')
             return True
         else:
             return False
@@ -145,6 +147,8 @@ def classifier(destination):
                     print(f'ERROR')
             print(f'Processed {line_count} lines.')
 
+    os.remove(destination)
+
 
 def scale(unscaledNum, minAllowed, maxAllowed, minCount, maxCount):
     return int(round((maxAllowed - minAllowed) * (unscaledNum - minCount) / (maxCount - minCount) + minAllowed))
@@ -239,13 +243,10 @@ def uploads():
         file.save(destination)
     if(assert_format(destination)):
         if(assert_csvformat(destination)):
-            os.remove(destination)
-            return "YAY! Process to wordcloud generator page", 202
+            return "Upload successfully, Please wait for process.", 202
         else:
-            os.remove(destination)
             return "Wrong csv format!", 202
     else:
-        os.remove(destination)
         return "Wrong file type!", 202
 
 

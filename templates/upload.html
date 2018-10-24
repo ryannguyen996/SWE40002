@@ -59,7 +59,8 @@
         </div>
         <div class="row">
             {% raw %}
-            <p>{{message}}</p>
+            <span>{{message}}</span>
+            <span ng-show="message">Processing time is 150 comments per second</span>
             {% endraw %}
         </div>
     </div>
