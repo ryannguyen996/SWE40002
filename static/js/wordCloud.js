@@ -1,5 +1,6 @@
 var app = angular.module('myApp', ['angular-d3-word-cloud', 'angularjs-dropdown-multiselect']);
 app.controller('TestCtrl', ['$scope', '$http', '$timeout', '$element', '$compile', function ($scope, $http, $timeout, $element, $compile) {
+    $scope.submitButtonTextD = 'Download comments';
     $scope.loading = false;
     $scope.submitButtonText = 'Submit';
     $scope.result = false;
@@ -143,7 +144,8 @@ app.controller('TestCtrl', ['$scope', '$http', '$timeout', '$element', '$compile
         $scope.message1 = "";
         $scope.loading = true;
         $scope.submitButtonText = 'Loading...';
-        if (userInput0 === 0) {
+        console.log(userInput0);
+        if (userInput0.length === 0) {
             $scope.message1 = "Invalid input";
             $scope.loading = false;
             $scope.submitButtonText = 'Submit';
@@ -187,6 +189,126 @@ app.controller('TestCtrl', ['$scope', '$http', '$timeout', '$element', '$compile
                     $scope.loading = false;
                     $scope.submitButtonText = 'Submit';
                 });
+        }
+    };
+
+    $scope.download = function () {
+        var userInput0 = [];
+        var userInput1 = [];
+        angular.forEach($scope.unitnumberSelected, function (value, index) {
+            userInput0.push(value.id);
+        });
+        angular.forEach($scope.topicSelected, function (value, index) {
+            userInput1.push(value.id);
+        });
+        $scope.message = "";
+        $scope.loading = true;
+        $scope.submitButtonTextD = 'Loading...';
+        console.log($scope.selection)
+        if (userInput0.length === 0) {
+            $scope.message = "Invalid input";
+            $scope.loading = false;
+            $scope.submitButtonTextD = 'Download comments';
+        } else {
+            $http.post('/downloadcsv', {
+                "unitnumber": userInput0,
+                "topic": userInput1
+            }, {
+                responseType: "arraybuffer"
+            }).then(function (response) {
+                    headers = response.headers();
+                    console.log(response.headers['x-filename']);
+                    var filename = headers['x-filename'];
+                    var contentType = headers['content-type'];
+
+                    var linkElement = document.createElement('a');
+                    try {
+                        var blob = new Blob([response.data], {
+                            type: contentType
+                        });
+                        var url = window.URL.createObjectURL(blob);
+
+                        linkElement.setAttribute('href', url);
+                        linkElement.setAttribute("download", filename);
+
+                        var clickEvent = new MouseEvent("click", {
+                            "view": window,
+                            "bubbles": true,
+                            "cancelable": false
+                        });
+                        linkElement.dispatchEvent(clickEvent);
+                        $scope.loading = false;
+                        $scope.submitButtonTextD = 'Download comments';
+                    } catch (ex) {
+                        console.log(ex);
+                    }
+                },
+                function (response) {
+                    $scope.message = response.data;
+                    $scope.loading = false;
+                    $scope.submitButtonTextD = 'Download comments';
+                });
+
+        }
+    };
+
+    $scope.download1 = function () {
+        var userInput0 = [];
+        var userInput1 = [];
+        angular.forEach($scope.unitnumber1Selected, function (value, index) {
+            userInput0.push(value.id);
+        });
+        angular.forEach($scope.topic1Selected, function (value, index) {
+            userInput1.push(value.id);
+        });
+        $scope.message1 = "";
+        $scope.loading = true;
+        $scope.submitButtonTextD = 'Loading...';
+        console.log($scope.selection)
+        if (userInput0.length === 0) {
+            $scope.message1 = "Invalid input";
+            $scope.loading = false;
+            $scope.submitButtonTextD = 'Download comments';
+        } else {
+            $http.post('/downloadcsv', {
+                "unitnumber": userInput0,
+                "topic": userInput1
+            }, {
+                responseType: "arraybuffer"
+            }).then(function (response) {
+                    headers = response.headers();
+                    console.log(response.headers['x-filename']);
+                    var filename = headers['x-filename'];
+                    var contentType = headers['content-type'];
+
+                    var linkElement = document.createElement('a');
+                    try {
+                        var blob = new Blob([response.data], {
+                            type: contentType
+                        });
+                        var url = window.URL.createObjectURL(blob);
+
+                        linkElement.setAttribute('href', url);
+                        linkElement.setAttribute("download", filename);
+
+                        var clickEvent = new MouseEvent("click", {
+                            "view": window,
+                            "bubbles": true,
+                            "cancelable": false
+                        });
+                        linkElement.dispatchEvent(clickEvent);
+                        $scope.loading = false;
+                        $scope.submitButtonTextD = 'Download comments';
+                    } catch (ex) {
+                        console.log(ex);
+                    }
+                },
+                function (response) {
+                    $scope.message1 = response.data;
+                    $scope.loading = false;
+                    $scope.submitButtonTextD = 'Download comments';
+                });
+
         }
     };
 

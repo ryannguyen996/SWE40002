@@ -75,22 +75,9 @@ def clean_text(text):
     text = re.sub(r"\'re", " are ", text)
     text = re.sub(r"\'d", " would ", text)
     text = re.sub(r"\'ll", " will ", text)
-    text = re.sub(r";", " ", text)
-    text = re.sub(r",", " ", text)
-    text = re.sub(r"\.", " ", text)
-    text = re.sub(r">", " ", text)
-    text = re.sub(r"<", " ", text)
-    text = re.sub(r"!", " ", text)
-    text = re.sub(r":", " ", text)
-    text = re.sub(r"\/", " ", text)
-    text = re.sub(r"\/", " ", text)
-    text = re.sub(r"\^", " ", text)
-    text = re.sub(r"\+", " ", text)
-    text = re.sub(r"\-", " ", text)
-    text = re.sub(r"\=", " ", text)
-    text = re.sub(r"'", " ", text)
+    text = re.sub(r"[^\w\s]", " ", text)
     text = re.sub(r"(\d+)(k)", r"\g<1>000", text)
-    text = re.sub(r":", " : ", text)
+    text = re.sub(r"\d", " ", text)
     text = re.sub(r" e g ", " eg ", text)
     text = re.sub(r" b g ", " bg ", text)
     text = re.sub(r" u s ", " american ", text)
@@ -376,9 +363,11 @@ def getwordcloudcount():
 
     topic = data["topic"]
     lists = []
+    lists1 = []
 
     a1 = Result.query
     a1 = a1.filter(Result.unit_number.in_(unitnumber))
+    a3 = a1
 
     if("assessment" in topic):
         a1 = a1.filter(Result.assessment_topic == 1)
@@ -392,13 +381,16 @@ def getwordcloudcount():
         a1 = a1.filter(Result.other_topic == 1)
 
     a1 = a1.all()
+    a3 = a3.all()
     if is_empty(a1):
         return " ", 406
 
     for a2 in a1:
         lists.append(a2.comment)
+    for a2 in a3:
+        lists1.append(a2.comment)
 
-    return ("There are {} comments satisfy the selection").format(str(len(lists))), 200
+    return ("There are {} out of {} comments satisfy the selection").format(str(len(lists)), str(len(lists1))), 200
 
 
 @app.route('/getavg', methods=['POST'])
@@ -545,15 +537,6 @@ def getimage():
     response.mimetype = 'image/png'
     plt.close(fig)
     return response
-
-
-@app.route("/download", methods=['GET'])
-def download():
-    lists = []
-    a1 = Result.query.with_entities(Result.unit_number).order_by(Result.unit_number).distinct()
-    for a2 in a1:
-        lists.append(a2.unit_number)
-    return render_template('download.html', lists=lists)
 
 
 @app.route("/downloadcsv", methods=['POST'])

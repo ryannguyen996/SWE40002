@@ -37,7 +37,7 @@
                         <li><a href="/upload">Upload</a></li>
                         <li class="active"><a href="/wordcloud">Wordcloud</a></li>
                         <li><a href="/statistics">Statistics</a></li>
-                        <li><a href="/download">Export</a></li>
+                        <li><a href="/help">Help</a></li>
                         <li><a href="/about">About Us</a></li>
                     </ul>
                 </section>
@@ -64,9 +64,9 @@
                         <span>* If not selected, all the comments will be considered.</span><br>
                         {% raw %}
                         <button type="submit" class="btn btn-primary" data-ng-disabled="loading">{{ submitButtonText }}</button>
-                        <p ng-show="message">{{message}}</p>
-                        <p ng-show="count">{{count}}</p>
-                        <p ng-show="avg">{{avg}}</p>
+                        <span ng-show="message">{{message}}</span><br />
+                        <span ng-show="count">{{count}}</span><br />
+                        <span ng-show="avg">{{avg}}</span>
                         {% endraw %}
                     </div>
 
@@ -74,6 +74,13 @@
                 <p>Wordcloud visualization</p>
                 <word-cloud words="words" width="400" height="400" padding="5" rotate="360" use-transition="true" on-click="" ng-show="result">
                 </word-cloud>
+                <form role="form" ng-show="result" data-ng-submit="download()">
+                    <div class="form-group">
+                        {% raw %}
+                        <button type="submit" class="btn btn-primary" data-ng-disabled="loading">{{ submitButtonTextD }}</button>
+                        {% endraw %}
+                    </div>
+                </form>
             </div>
 
             <div class="col-xs-6" ng-show="compare">
@@ -86,15 +93,22 @@
                         <span>* If not selected, all the comments will be considered.</span><br>
                         {% raw %}
                         <button type="submit" class="btn btn-primary" data-ng-disabled="loading">{{ submitButtonText }}</button>
-                        <p ng-show="message1">{{message1}}</p>
-                        <p ng-show="count1">{{count1}}</p>
-                        <p ng-show="avg1">{{avg1}}</p>
+                        <span ng-show="message1">{{message1}}</span><br />
+                        <span ng-show="count1">{{count1}}</span><br />
+                        <span ng-show="avg1">{{avg1}}</span>
                         {% endraw %}
                     </div>
 
                 </form>
                 <p>Wordcloud visualization</p>
                 <word-cloud words="words1" width="400" height="400" padding="5" rotate="360" use-transition="true" on-click="" ng-show="result1"></word-cloud>
+                <form role="form" ng-show="result1" data-ng-submit="download1()">
+                    <div class="form-group">
+                        {% raw %}
+                        <button type="submit" class="btn btn-primary" data-ng-disabled="loading">{{ submitButtonTextD }}</button>
+                        {% endraw %}
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -110,7 +124,6 @@
                         <li><a href="/upload" title="Upload">Upload</a></li>
                         <li><a href="/wordcloud" title="Wordcloud">Wordcloud</a></li>
                         <li><a href="/statistics" title="Statistic">Statistic</a></li>
-                        <li><a href="/download" title="Download">Export</a></li>
                         <li><a href="/help" title="Help">Help</a></li>
                     </ul>
                 </div>
