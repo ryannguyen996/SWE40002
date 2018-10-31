@@ -347,6 +347,7 @@ def getwordcloud():
         dicta = {'text': i[0], 'size': round(maxWordSize - ((maxCount - i[1])*step)), 'color': color(e)}
         jsonlist.append(dicta)
 
+    jsonlist.pop(1)
     jsonStr = json.dumps(jsonlist)
     return jsonify(jsonStr), 200
 
@@ -406,8 +407,11 @@ def getavg():
 
     a3 = 0
     a4 = 0
+    a7 = 0
+    a8 = 0
     a1 = Result.query
     a1 = a1.filter(Result.unit_number.in_(unitnumber))
+    a6 = a1
 
     if("assessment" in topic):
         a1 = a1.filter(Result.assessment_topic == 1)
@@ -421,16 +425,24 @@ def getavg():
         a1 = a1.filter(Result.other_topic == 1)
 
     a1 = a1.all()
+    a6 = a6.all()
     if is_empty(a1):
         return " ", 406
+
+    for a2 in a6:
+        a7 += a2.satisfaction
+        a8 += 1
 
     for a2 in a1:
         a3 += a2.satisfaction
         a4 += 1
 
     a5 = a3/a4
+    a9 = a7/a8
     print(a5)
-    return ("The average sastisfaction score is {0:.2f} ").format(round(a5, 2)), 200
+    print(a9)
+    return ("The average satisfaction score for the selection is {}/10.The average satisfaction score for this unit is {}/10").format(round(a5, 2), round(a9, 2)), 200
+    #return ("The average sastisfaction score is {0:.2f} ").format(round(a5, 2)), 200
 
 
 @app.route("/statistics", methods=['GET'])

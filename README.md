@@ -9,6 +9,10 @@ The aim of this project is to develop a software system that incorporates a numb
 
 Students interested in this project are expected to have good analytical and programming skills, knowledge in data mining and analytics, especially mining of textual information, familiarity with basic statistics, and the willingness to explore a variety of technologies to create a solution.
 
+## Requirements
+
+Python 3.6.6
+
 ## Quick Start
 
 ### First Steps
