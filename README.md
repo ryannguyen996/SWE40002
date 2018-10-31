@@ -11,7 +11,7 @@ Students interested in this project are expected to have good analytical and pro
 
 ## Requirements
 
-Python 3.6.6
+Python 3.6.6 (for Heroku deploy)
 
 ## Quick Start
 
