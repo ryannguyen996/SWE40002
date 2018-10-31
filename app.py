@@ -347,7 +347,6 @@ def getwordcloud():
         dicta = {'text': i[0], 'size': round(maxWordSize - ((maxCount - i[1])*step)), 'color': color(e)}
         jsonlist.append(dicta)
 
-    jsonlist.pop(1)
     jsonStr = json.dumps(jsonlist)
     return jsonify(jsonStr), 200
 
