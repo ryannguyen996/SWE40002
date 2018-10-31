@@ -487,13 +487,11 @@ def getimage():
         for i in categories:
             counts.append((i, df_clean[i].sum()))
         df_stats = pd.DataFrame(counts, columns=['category', 'number_of_comments'])
-        print(df_stats)
         df_stats['category'][0] = 'Assessment'
         df_stats['category'][1] = 'Class'
         df_stats['category'][2] = 'Teacher'
         df_stats['category'][3] = 'Resource'
         df_stats['category'][4] = 'Other'
-        print(df_stats)
 
         df_stats.plot(x='category', y='number_of_comments', kind='bar', legend=False, grid=False, figsize=(8, 5))
         plt.title("Number of comments per category")
