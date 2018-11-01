@@ -29,7 +29,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 nltk.data.path.append('./nltk_data/')
 q = Queue(connection=conn)
-from models import Result
+from models import *
 
 
 def assert_format(destination):
