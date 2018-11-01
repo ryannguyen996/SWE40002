@@ -11,8 +11,8 @@ Students interested in this project are expected to have good analytical and pro
 
 ## Requirements
 
-Python 3.6.6 (for Heroku deploy)
-Ubuntu 18.04
+Python 3.6.6 (for Heroku deploy),
+Ubuntu 18.04,
 PostgreSQL
 
 ## Quick Start
