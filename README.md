@@ -48,5 +48,5 @@ $ redis-server
 $ python worker.py
 
 # the app
-$ python app.py
+$ python manage.py runserver
 ```
