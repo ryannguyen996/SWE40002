@@ -18,7 +18,7 @@ Python 3.6.6 (for Heroku deploy)
 ### First Steps
 
 ```sh
-$ virtualenv env
+$ python3 -m venv env
 $ source env/bin/activate
 $ pip install -r requirements.txt
 ```
