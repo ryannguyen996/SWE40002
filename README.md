@@ -11,16 +11,21 @@ Students interested in this project are expected to have good analytical and pro
 
 ## Requirements
 
-Python 3.6.6
+Python 3.6.6 (for Heroku deploy),
+Ubuntu 18.04,
+PostgreSQL,
+Redis server
 
 ## Quick Start
 
 ### First Steps
 
 ```sh
-$ virtualenv env
+$ python3 -m venv env
 $ source env/bin/activate
 $ pip install -r requirements.txt
+$ export APP_SETTINGS="config.DevelopmentConfig"
+$ export DATABASE_URL="[POSTGRES database url here]"
 ```
 
 ### Set up Migrations
@@ -29,4 +34,19 @@ $ pip install -r requirements.txt
 $ python manage.py db init
 $ python manage.py db migrate
 $ python manage.py db upgrade
+```
+
+### Run
+
+Run each in a different terminal window...
+
+```sh
+# redis
+$ redis-server
+
+# worker process
+$ python worker.py
+
+# the app
+$ python manage.py runserver
 ```
