@@ -42,7 +42,7 @@ Run each in a different terminal window...
 
 ```sh
 # redis
-$ redis server
+$ redis-server
 
 # worker process
 $ python worker.py
