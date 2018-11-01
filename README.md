@@ -21,6 +21,8 @@ Python 3.6.6 (for Heroku deploy)
 $ python3 -m venv env
 $ source env/bin/activate
 $ pip install -r requirements.txt
+$ export APP_SETTINGS="config.DevelopmentConfig"
+$ export DATABASE_URL="[POSTGRES database url here]"
 ```
 
 ### Set up Migrations
