@@ -68,7 +68,7 @@ app.controller('TestCtrl', ['$scope', '$http', function ($scope, $http) {
         $scope.loading = true;
         $scope.submitButtonText = 'Loading...';
         console.log($scope.selection)
-        if (userInput0.length === 0 || $scope.selection.length === 0 || $scope.selection.length === undefined) {
+        if (userInput0.length === 0 || $scope.selection.length === 0 || $scope.selection === undefined) {
             $scope.message = "Invalid input";
             $scope.loading = false;
             $scope.submitButtonText = 'Submit';
