@@ -58,7 +58,7 @@ $ python manage.py runserver
 
 ## Extentions
 
-The application based on Flask, a microframework for Python. In order to extent the application, familiar with Python as well as facade pattern framework is required. Add new functionality by declare new route and new template if needed. Please refer to Flask documentation for more information (http://flask.pocoo.org/).
+The application based on Flask, a microframework for Python. In order to extent the application, familiar with Python as well as facade pattern framework is required. Add new functionality by declare new route under app.py and new template (in template folder) and related assets if needed. Please refer to Flask documentation for more information (http://flask.pocoo.org/).
 
 Example from Flask website:
 
